@@ -4,6 +4,13 @@ public class Main
 {
 	public static void main(String[] args) 
 	{
-		System.out.printf("This does something");
+		Score score = new Score();
+		
+		score.getScores("Tetris");
+		
+		score.setCurrent_Score(115);
+		score.setCurrentName("TST");
+		
+		score.checkScore();
 	}
 }
