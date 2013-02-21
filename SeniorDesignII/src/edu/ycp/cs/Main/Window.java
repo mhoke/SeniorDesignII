@@ -11,6 +11,8 @@ public class Window extends JFrame
 {
 	private static final long serialVersionUID = 1L; //Dont know what this does either
 	
+	//Test
+	
 	private static void createAndShowGUI()  {
 		 
 		final JFrame mainmenu = new JFrame();
