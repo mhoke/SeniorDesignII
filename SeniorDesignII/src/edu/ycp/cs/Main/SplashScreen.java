@@ -3,85 +3,43 @@ package edu.ycp.cs.Main;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+class SplashScreen extends JPanel {
+	private static final long serialVersionUID = 1L;
 
-class SplashScreen extends JWindow {
+	private BufferedImage background;
 
-	/*private int duration;
-
-	public static void main(String[] args) {
-		SplashScreen splash = new SplashScreen(10000);
-	}*/
-
-	public static void main(String[] args) {
-		new SplashScreen();
+	public SplashScreen() {
+		try {
+			background = ImageIO.read(new File("Logo.png"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public SplashScreen()  {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager
-							.getSystemLookAndFeelClassName());
-				} catch (ClassNotFoundException ex) {
-				} catch (InstantiationException ex) {
-				} catch (IllegalAccessException ex) {
-				} catch (UnsupportedLookAndFeelException ex) {
-				}
-
-				JFrame frame = new JFrame("M&M Arcade");
-				JButton button = new JButton("Continue");
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setLayout(new FlowLayout());
-				frame.add(new ImagePane());
-				frame.add(button);				
-				frame.pack();
-				frame.setLocationRelativeTo(null);
-				frame.setVisible(true);
-			}
-		});
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(800, 600);
 	}
 
-	public class ImagePane extends JLayeredPane {
-
-		private BufferedImage background;
-
-		public ImagePane() {
-			try {
-				background = ImageIO.read(new File("Logo.png"));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (background != null) {
+			int x = (getWidth() - background.getWidth());
+			int y = (getHeight() - background.getHeight());
+			g.drawImage(background, x, y, this);
 		}
 
-		@Override
-		public Dimension getPreferredSize() {
-			return new Dimension(800, 600);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			if (background != null) {
-				int x = (getWidth() - background.getWidth());
-				int y = (getHeight() - background.getHeight());
-				g.drawImage(background, x, y, this);
-			}
-
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setPaint(Color.white);
-			g2d.drawString("Please wait...", getWidth() / 2,
-					getHeight() * 3 / 4);
-		}
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setPaint(Color.white);
+		g2d.drawString("Please wait...", getWidth() / 2, getHeight() * 3 / 4);
 	}
 }
 
