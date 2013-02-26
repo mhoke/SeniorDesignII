@@ -12,14 +12,14 @@ public class Main {
 		score.setCurrentName("TST");
 
 		score.checkScore();
-		
-		//Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                makeGUI();
-            }
-        });
+
+		// Schedule a job for the event dispatch thread:
+		// creating and showing this application's GUI.
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				makeGUI();
+			}
+		});
 	}
 
 	private static void makeGUI() {
