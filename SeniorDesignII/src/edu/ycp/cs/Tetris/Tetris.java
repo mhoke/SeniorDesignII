@@ -88,10 +88,10 @@ public class Tetris
 	{
 		boolean flag = true;
 		
-		for(int i = 0; i < 10; i ++)
+		for(int j = 0; j < 20; j ++)
 		{
 			flag = true;
-			for(int j = 0; j < 20; j ++)
+			for(int i = 0; i < 10; i ++)
 			{
 				if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey())
 				{
@@ -104,7 +104,7 @@ public class Tetris
 			}
 			if(flag == true)
 			{
-				remove_Row(i);
+				remove_Row(j);
 			}
 		}
 		
@@ -322,19 +322,44 @@ public class Tetris
 		{
 			for(int j = 0; j < 20; j ++)
 			{
-				if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey())
+				if(grid[i][j] == Pieces.CURRENT.getKey())
 				{
 					row_diff = cur_col - i;
 					col_diff = cur_row - j;
 					
-					if(i + col_diff >= 10 || j + row_diff >= 20)
+					int new_row = cur_row;
+					int new_col = cur_col;
+					
+					if(col_diff > 0)
+					{
+						new_row = cur_row + col_diff;
+					}
+					else if(col_diff <= 0)
+					{
+						new_row = cur_row - col_diff;
+					}
+					
+					if(row_diff > 0)
+					{
+						new_col = cur_col - row_diff;
+					}
+					
+					else if(col_diff <= 0)
+					{
+						new_col = cur_col + row_diff;
+					}
+					
+					System.out.print("(" + i + ", " + j + ") rotates to: ");
+					System.out.println("(" + new_col + ", " + new_row + ")");
+					
+					if(new_col >= 10 || new_row >= 20)
 					{
 						i = 11;
 						j = 21;
 						flag = false;
 					}
 					
-					else if(grid[i + col_diff][j + row_diff] != Pieces.BLANK.getKey() && grid[i + col_diff][j + row_diff] != Pieces.CURRENT.getKey() && grid[i + col_diff][j + row_diff] != Pieces.TWO.getKey() && grid[i + col_diff][j + row_diff] != Pieces.ROTATE.getKey())
+					else if(grid[new_col][new_row] != Pieces.BLANK.getKey() && grid[new_col][new_row] != Pieces.CURRENT.getKey())
 					{
 						i = 11;
 						j = 21;
@@ -350,31 +375,63 @@ public class Tetris
 			{
 				for(int j = 0; j < 20; j ++)
 				{
-					if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey() || grid[i][j] == Pieces.ROTATE.getKey())
+					if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey())
 					{
 						col_diff = cur_col - i;
 						row_diff = cur_row - j;
 						
-						if(col_diff != 0 && row_diff != 0)
+						int new_row = cur_row;
+						int new_col = cur_col;
+						
+						if(col_diff > 0)
 						{
-							if(grid[i + col_diff][j + row_diff] == Pieces.CURRENT.getKey() || grid[i + col_diff][j + row_diff] == Pieces.TWO.getKey())
-							{
-								grid[i + col_diff][j + row_diff] = Pieces.ROTATE.getKey();
-							}
-							else if(grid[i + col_diff][j + row_diff] == Pieces.BLANK.getKey())
-							{
-								grid[i + col_diff][j + row_diff] = Pieces.CURRENT.getKey();
-							}
-							
-							if(grid[i][j] == Pieces.CURRENT.getKey())
-							{
-								grid[i][j] = Pieces.BLANK.getKey();
-							}
-							else if(grid[i][j] == Pieces.ROTATE.getKey())
-							{
-								grid[i][j] = Pieces.CURRENT.getKey();
-							}
+							new_row = cur_row + col_diff;
 						}
+						else if(col_diff <= 0)
+						{
+							new_row = cur_row - col_diff;
+						}
+						
+						if(row_diff > 0)
+						{
+							new_col = cur_col - row_diff;
+						}
+						
+						else if(col_diff <= 0)
+						{
+							new_col = cur_col + row_diff;
+						}
+						
+						if(grid[new_col][new_row] == Pieces.CURRENT.getKey())
+						{
+							grid[new_col][new_row] = Pieces.TWO.getKey();
+						}
+						else if(grid[new_col][new_row] == Pieces.BLANK.getKey())
+						{
+							grid[new_col][new_row] = Pieces.ROTATE.getKey();
+						}
+						
+						if(grid[i][j] == Pieces.CURRENT.getKey())
+						{
+							grid[i][j] = Pieces.BLANK.getKey();
+						}
+						else if(grid[i][j] == Pieces.TWO.getKey())
+						{
+							grid[i][j] = Pieces.ROTATE.getKey();
+						}
+					}
+				}
+			}
+			
+			print_Game();
+			
+			for(int i = 0; i < 10; i ++)
+			{
+				for(int j = 0; j < 20; j ++)
+				{
+					if(grid[i][j] == Pieces.ROTATE.getKey())
+					{
+						grid[i][j] = Pieces.CURRENT.getKey();
 					}
 				}
 			}
