@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Window {
-	private static final long serialVersionUID = 1L;
 	JPanel cards; // a panel that uses CardLayout
 	final static String SPLASHSCREEN = "SplashScreen";
 	final static String MAINMENU = "MainMenu";

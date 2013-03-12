@@ -39,8 +39,6 @@ class SplashScreen extends JPanel {
 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setPaint(Color.white);
-		g2d.drawString("Please wait...", getWidth() / 2, getHeight() * 3 / 4);
-		add(new JButton("TEST"));
 	}
 }
 
