@@ -312,10 +312,7 @@ public class Tetris
 	}
 	
 	public void rotate_right()
-	{
-		int col_diff;
-		int row_diff;
-		
+	{	
 		boolean flag = true;
 		
 		for(int i = 0; i < 10; i ++)
@@ -324,115 +321,207 @@ public class Tetris
 			{
 				if(grid[i][j] == Pieces.CURRENT.getKey())
 				{
-					row_diff = cur_col - i;
-					col_diff = cur_row - j;
+					//There are 20 rows and 10 columns
+					int temp_row;
+					int temp_col;
 					
-					int new_row = cur_row;
-					int new_col = cur_col;
-					
-					if(col_diff > 0)
+					if(j < cur_row)
 					{
-						new_row = cur_row + col_diff;
+						temp_col = cur_col - (cur_row - j);
 					}
-					else if(col_diff <= 0)
+					else
 					{
-						new_row = cur_row - col_diff;
+						temp_col = cur_col + (j - cur_row);
 					}
 					
-					if(row_diff > 0)
+					if(i < cur_col)
 					{
-						new_col = cur_col - row_diff;
+						temp_row = cur_row + (cur_col - i);
+					}
+					else
+					{
+						temp_row = cur_row - (i - cur_col);
 					}
 					
-					else if(col_diff <= 0)
-					{
-						new_col = cur_col + row_diff;
-					}
-					
-					System.out.print("(" + i + ", " + j + ") rotates to: ");
-					System.out.println("(" + new_col + ", " + new_row + ")");
-					
-					if(new_col >= 10 || new_row >= 20)
+					if(temp_col >= 10 || temp_row >= 20 ||  temp_col < 0 || temp_row < 0 || (grid[temp_col][temp_row] != Pieces.CURRENT.getKey() && grid[temp_col][temp_row] != Pieces.BLANK.getKey()))
 					{
 						i = 11;
 						j = 21;
 						flag = false;
 					}
 					
-					else if(grid[new_col][new_row] != Pieces.BLANK.getKey() && grid[new_col][new_row] != Pieces.CURRENT.getKey())
-					{
-						i = 11;
-						j = 21;
-						flag = false;
-					}
+					//System.out.println("(" + i + ", " + j + ") rotates to (" + temp_col + ", " + temp_row + ")");
 				}
 			}
 		}
 		
 		if(flag)
-		{
+		{	
 			for(int i = 0; i < 10; i ++)
 			{
 				for(int j = 0; j < 20; j ++)
 				{
 					if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey())
 					{
-						col_diff = cur_col - i;
-						row_diff = cur_row - j;
+						//There are 20 rows and 10 columns
+						int temp_row;
+						int temp_col;
 						
-						int new_row = cur_row;
-						int new_col = cur_col;
-						
-						if(col_diff > 0)
+						if(j < cur_row)
 						{
-							new_row = cur_row + col_diff;
+							temp_col = cur_col - (cur_row - j);
 						}
-						else if(col_diff <= 0)
+						else
 						{
-							new_row = cur_row - col_diff;
+							temp_col = cur_col + (j - cur_row);
 						}
 						
-						if(row_diff > 0)
+						if(i < cur_col)
 						{
-							new_col = cur_col - row_diff;
+							temp_row = cur_row + (cur_col - i);
 						}
-						
-						else if(col_diff <= 0)
+						else
 						{
-							new_col = cur_col + row_diff;
-						}
-						
-						if(grid[new_col][new_row] == Pieces.CURRENT.getKey())
-						{
-							grid[new_col][new_row] = Pieces.TWO.getKey();
-						}
-						else if(grid[new_col][new_row] == Pieces.BLANK.getKey())
-						{
-							grid[new_col][new_row] = Pieces.ROTATE.getKey();
+							temp_row = cur_row - (i - cur_col);
 						}
 						
 						if(grid[i][j] == Pieces.CURRENT.getKey())
 						{
 							grid[i][j] = Pieces.BLANK.getKey();
 						}
-						else if(grid[i][j] == Pieces.TWO.getKey())
+						else
 						{
 							grid[i][j] = Pieces.ROTATE.getKey();
+						}
+						
+						if(grid[temp_col][temp_row] == Pieces.CURRENT.getKey())
+						{
+							grid[temp_col][temp_row] = Pieces.TWO.getKey();
+						}
+						else
+						{
+							grid[temp_col][temp_row] = Pieces.ROTATE.getKey();
 						}
 					}
 				}
 			}
-			
-			print_Game();
-			
+		}
+		
+		for(int i = 0; i < 10; i ++)
+		{
+			for(int j = 0; j < 20; j ++)
+			{
+				if(grid[i][j] == Pieces.ROTATE.getKey())
+				{
+					grid[i][j] = Pieces.CURRENT.getKey();
+				}
+			}
+		}
+	}
+	
+	public void rotate_left()
+	{	
+		boolean flag = true;
+		
+		for(int i = 0; i < 10; i ++)
+		{
+			for(int j = 0; j < 20; j ++)
+			{
+				if(grid[i][j] == Pieces.CURRENT.getKey())
+				{
+					//There are 20 rows and 10 columns
+					int temp_row;
+					int temp_col;
+					
+					if(j < cur_row)
+					{
+						temp_col = cur_col + (j - cur_row);
+					}
+					else
+					{
+						temp_col = cur_col - (cur_row - j);
+					}
+					
+					if(i < cur_col)
+					{
+						temp_row = cur_row - (i - cur_col);
+					}
+					else
+					{
+						temp_row = cur_row + (cur_col - i);
+					}
+					
+					if(temp_col >= 10 || temp_row >= 20 || temp_col < 0 || temp_row < 0 || (grid[temp_col][temp_row] != Pieces.CURRENT.getKey() && grid[temp_col][temp_row] != Pieces.BLANK.getKey()))
+					{
+						i = 11;
+						j = 21;
+						flag = false;
+					}
+					
+					//System.out.println("(" + i + ", " + j + ") rotates to (" + temp_col + ", " + temp_row + ")");
+				}
+			}
+		}
+		
+		if(flag)
+		{	
 			for(int i = 0; i < 10; i ++)
 			{
 				for(int j = 0; j < 20; j ++)
 				{
-					if(grid[i][j] == Pieces.ROTATE.getKey())
+					if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey())
 					{
-						grid[i][j] = Pieces.CURRENT.getKey();
+						//There are 20 rows and 10 columns
+						int temp_row;
+						int temp_col;
+						
+						if(j < cur_row)
+						{
+							temp_col = cur_col - (cur_row - j);
+						}
+						else
+						{
+							temp_col = cur_col + (j - cur_row);
+						}
+						
+						if(i < cur_col)
+						{
+							temp_row = cur_row + (cur_col - i);
+						}
+						else
+						{
+							temp_row = cur_row - (i - cur_col);
+						}
+						
+						if(grid[i][j] == Pieces.CURRENT.getKey())
+						{
+							grid[i][j] = Pieces.BLANK.getKey();
+						}
+						else
+						{
+							grid[i][j] = Pieces.ROTATE.getKey();
+						}
+						
+						if(grid[temp_col][temp_row] == Pieces.CURRENT.getKey())
+						{
+							grid[temp_col][temp_row] = Pieces.TWO.getKey();
+						}
+						else
+						{
+							grid[temp_col][temp_row] = Pieces.ROTATE.getKey();
+						}
 					}
+				}
+			}
+		}
+		
+		for(int i = 0; i < 10; i ++)
+		{
+			for(int j = 0; j < 20; j ++)
+			{
+				if(grid[i][j] == Pieces.ROTATE.getKey())
+				{
+					grid[i][j] = Pieces.CURRENT.getKey();
 				}
 			}
 		}

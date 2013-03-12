@@ -19,12 +19,13 @@ public class Game
 			int val = random.nextInt(5);
 			if(val == 0)
 			{
-				game.move_Left();
+				//game.move_Left();
 			}
 			else if(val == 1)
 			{
-				game.move_Right();
+				//game.move_Right();
 			}
+			//game.rotate_left();
 			game.rotate_right();
 			game.move_Down();
 			game.print_Game();
