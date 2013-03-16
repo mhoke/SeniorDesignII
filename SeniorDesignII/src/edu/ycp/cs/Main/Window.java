@@ -48,7 +48,7 @@ public class Window {
 		splash.add(continueButton);
 		
 		//Buttons for MainMenu
-		JButton menuButton1 = new JButton("PLAY!");	
+		JButton menuButton1 = new JButton("PLAY TETRIS");	
 		menuButton1.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -60,33 +60,32 @@ public class Window {
 		JButton menuButton2 = new JButton("HIGH SCORES");
 		
 		//MainMenu setup
-//		card2.setLayout(new GridBagLayout());		
-//		GridBagConstraints gbc = new GridBagConstraints();
-//		gbc.gridx = 0;
-//		gbc.gridy = 0;
-//		gbc.insets = new Insets(2,2,2,2);
-//		gbc.anchor = GridBagConstraints.CENTER;
-//		MainMenuScreen mms = new MainMenuScreen();
-//		mms.setLayout(new FlowLayout());
-//		card2.add(mms);
-//		card2.add(menuButton1, gbc);
-		
 		MainMenuScreen mms = new MainMenuScreen();
-		mms.setLayout(new FlowLayout());
+		mms.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(2,2,2,2);
 		card2.add(mms);
-		mms.add(menuButton1);
-		mms.add(menuButton2);
+		mms.add(menuButton1, gbc);
+		gbc.gridy = 1;
+		mms.add(menuButton2, gbc);
 		
 		//Tetris setup
 		JLabel label = new JLabel("TETRIS GAME WILL GO HERE");
 		JButton startGame = new JButton("START GAME");
-		card3.add(label);
-		card3.add(startGame);
+		card3.setLayout(new GridBagLayout());
+		GridBagConstraints gbc2 = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(2,2,2,2);		
+		card3.add(label, gbc2);
+		gbc2.gridy = 1;
+		card3.add(startGame, gbc2);
 		startGame.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//Game game = new Game();
 				try {
 					Game.main(null);
 				} catch (InterruptedException e1) {
@@ -104,7 +103,6 @@ public class Window {
 		cards.add(card3, TETRIS);
 
 		//Creates the actual window
-		pane.add(gameWindow, BorderLayout.PAGE_START);
 		pane.add(cards, BorderLayout.CENTER);
 	}
 }
