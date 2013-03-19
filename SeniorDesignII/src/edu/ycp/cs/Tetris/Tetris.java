@@ -9,6 +9,7 @@ public class Tetris
 	Style cur_style;
 	Pieces next_color;
 	Style next_style;
+	boolean over;
 	
 	public Tetris()
 	{
@@ -24,6 +25,7 @@ public class Tetris
 		
 		next_color = Pieces.createColor();
 		next_style = Style.createStyle();
+		over = false;
 		
 		create_Piece();
 	}
@@ -87,15 +89,17 @@ public class Tetris
 	public void set_Piece()
 	{
 		boolean flag = true;
+		int count = 0;
 		
 		for(int j = 0; j < 20; j ++)
 		{
 			flag = true;
 			for(int i = 0; i < 10; i ++)
 			{
-				if(grid[i][j] == Pieces.CURRENT.getKey() || grid[i][j] == Pieces.TWO.getKey())
+				if(grid[i][j] == Pieces.CURRENT.getKey())
 				{
 					grid[i][j] = cur_color.getKey();
+					count ++;
 				}
 				if(grid[i][j] == Pieces.BLANK.getKey())
 				{
@@ -105,6 +109,10 @@ public class Tetris
 			if(flag == true)
 			{
 				remove_Row(j);
+			}
+			if(count != 4)
+			{
+				over = true;
 			}
 		}
 		
@@ -538,5 +546,30 @@ public class Tetris
 			}
 			System.out.print("\n");
 		}
+	}
+
+	public int[][] getGrid() 
+	{
+		return grid;
+	}
+
+	public Pieces getCur_color() 
+	{
+		return cur_color;
+	}
+
+	public Pieces getNext_color() 
+	{
+		return next_color;
+	}
+
+	public Style getNext_style() 
+	{
+		return next_style;
+	}
+
+	public boolean isOver() 
+	{
+		return over;
 	}
 }
