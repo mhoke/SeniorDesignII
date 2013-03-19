@@ -32,7 +32,7 @@ public class Window {
 		JPanel card3 = new JPanel();
 		
 		//Button for SplashScreen
-		JButton continueButton = new JButton("Continue");
+		JButton continueButton = new JButton("CONTINUE TO MAIN MENU");
 		continueButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
