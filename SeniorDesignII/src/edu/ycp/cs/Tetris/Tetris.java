@@ -2,6 +2,9 @@ package edu.ycp.cs.Tetris;
 
 public class Tetris 
 {
+	int NUM_ROWS = 20;
+	int NUM_COLS = 10;
+	
 	int grid[][];
 	int cur_row;
 	int cur_col;
@@ -571,5 +574,15 @@ public class Tetris
 	public boolean isOver() 
 	{
 		return over;
+	}
+	
+	public int getNumRows()
+	{
+		return NUM_ROWS;
+	}
+	
+	public int getNumCols()
+	{
+		return NUM_COLS;
 	}
 }

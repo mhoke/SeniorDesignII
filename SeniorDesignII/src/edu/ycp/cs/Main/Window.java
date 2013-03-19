@@ -13,8 +13,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import edu.ycp.cs.Tetris.Game;
+import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
 	JPanel cards;
@@ -85,7 +87,8 @@ public class Window {
 		startGame.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				Tetris game = new Tetris();
+				JTable table = new JTable(game.getNumRows(), game.getNumCols());
 				try {
 					Game.main(null);
 				} catch (InterruptedException e1) {
