@@ -8,10 +8,12 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -117,6 +119,7 @@ public class Window {
         return component.getBackground();
     }
 
+	//Render each cell as a background color dependent on grid from tetris game
     class MyRenderer implements TableCellRenderer {
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             JTextField editor = new JTextField();
@@ -142,6 +145,7 @@ public class Window {
         }
     }
     
+    //Overwrite the Table Model to be what I want color wise
     @SuppressWarnings("serial")
 	class MyTableModel extends AbstractTableModel {
         public int getColumnCount() {
