@@ -43,56 +43,112 @@ public class Tetris
 		cur_row = 19;
 		cur_col = 4;
 		
+		if(grid[4][19] != Pieces.BLANK.getKey())
+		{
+			over = true;
+		}
+		
 		grid[4][19] = Pieces.CURRENT.getKey();
 		
 		if(cur_style == Style.BOX)
 		{
-			grid[5][19] = Pieces.CURRENT.getKey();
-			grid[4][18] = Pieces.CURRENT.getKey();
-			grid[5][18] = Pieces.CURRENT.getKey();
+			if(grid[5][19] != Pieces.BLANK.getKey() || grid[4][18] != Pieces.BLANK.getKey() || grid[5][18] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[5][19] = Pieces.CURRENT.getKey();
+				grid[4][18] = Pieces.CURRENT.getKey();
+				grid[5][18] = Pieces.CURRENT.getKey();
+			}
 		}
 		else if(cur_style == Style.L)
 		{
-			grid[5][19] = Pieces.CURRENT.getKey();
-			grid[6][19] = Pieces.CURRENT.getKey();
-			grid[4][18] = Pieces.CURRENT.getKey();
+			if(grid[5][19] != Pieces.BLANK.getKey() || grid[6][19] != Pieces.BLANK.getKey() || grid[4][18] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[5][19] = Pieces.CURRENT.getKey();
+				grid[6][19] = Pieces.CURRENT.getKey();
+				grid[4][18] = Pieces.CURRENT.getKey();
+			}
 		}
 		else if(cur_style == Style.RL)
 		{
-			grid[4][18] = Pieces.CURRENT.getKey();
-			grid[5][18] = Pieces.CURRENT.getKey();
-			grid[6][18] = Pieces.CURRENT.getKey();
+			if(grid[4][18] != Pieces.BLANK.getKey() || grid[5][18] != Pieces.BLANK.getKey() || grid[6][18] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[4][18] = Pieces.CURRENT.getKey();
+				grid[5][18] = Pieces.CURRENT.getKey();
+				grid[6][18] = Pieces.CURRENT.getKey();
+			}
 		}
 		else if(cur_style == Style.ROD)
 		{
-			grid[5][19] = Pieces.CURRENT.getKey();
-			grid[6][19] = Pieces.CURRENT.getKey();
-			grid[7][19] = Pieces.CURRENT.getKey();
+			if(grid[5][19] != Pieces.BLANK.getKey() || grid[6][19] != Pieces.BLANK.getKey() || grid[7][19] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[5][19] = Pieces.CURRENT.getKey();
+				grid[6][19] = Pieces.CURRENT.getKey();
+				grid[7][19] = Pieces.CURRENT.getKey();
+			}
 		}
 		else if(cur_style == Style.RZ)
 		{
-			grid[3][19] = Pieces.CURRENT.getKey();
-			grid[4][18] = Pieces.CURRENT.getKey();
-			grid[5][18] = Pieces.CURRENT.getKey();
+			if(grid[3][19] != Pieces.BLANK.getKey() || grid[4][18] != Pieces.BLANK.getKey() || grid[5][18] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[3][19] = Pieces.CURRENT.getKey();
+				grid[4][18] = Pieces.CURRENT.getKey();
+				grid[5][18] = Pieces.CURRENT.getKey();
+			}
 		}
 		else if(cur_style == Style.T)
 		{
+			if(grid[5][19] != Pieces.BLANK.getKey() || grid[4][18] != Pieces.BLANK.getKey() || grid[3][19] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[5][19] = Pieces.CURRENT.getKey();
+				grid[4][18] = Pieces.CURRENT.getKey();
+				grid[3][19] = Pieces.CURRENT.getKey();
+			}
 			grid[5][19] = Pieces.CURRENT.getKey();
 			grid[4][18] = Pieces.CURRENT.getKey();
 			grid[3][19] = Pieces.CURRENT.getKey();
 		}
 		else if(cur_style == Style.Z)
 		{
-			grid[5][19] = Pieces.CURRENT.getKey();
-			grid[4][18] = Pieces.CURRENT.getKey();
-			grid[3][18] = Pieces.CURRENT.getKey();
+			if(grid[5][19] != Pieces.BLANK.getKey() || grid[4][18] != Pieces.BLANK.getKey() || grid[3][18] != Pieces.BLANK.getKey())
+			{
+				over = true;
+			}
+			else
+			{
+				grid[5][19] = Pieces.CURRENT.getKey();
+				grid[4][18] = Pieces.CURRENT.getKey();
+				grid[3][18] = Pieces.CURRENT.getKey();
+			}
 		}
 	}
 	
 	public void set_Piece()
 	{
 		boolean flag = true;
-		int count = 0;
 		
 		for(int j = 0; j < 20; j ++)
 		{
@@ -102,7 +158,6 @@ public class Tetris
 				if(grid[i][j] == Pieces.CURRENT.getKey())
 				{
 					grid[i][j] = cur_color.getKey();
-					count ++;
 				}
 				if(grid[i][j] == Pieces.BLANK.getKey())
 				{
@@ -112,10 +167,6 @@ public class Tetris
 			if(flag == true)
 			{
 				remove_Row(j);
-			}
-			if(count != 4)
-			{
-				over = true;
 			}
 		}
 		
