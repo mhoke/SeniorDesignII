@@ -559,6 +559,10 @@ public class Tetris
 	public void setGrid(int[][] grid) {
 		this.grid = grid;
 	}
+	
+	public int getGridElem(int row, int col) {
+		return grid[col][row];
+	}
 
 	public Pieces getCur_color() 
 	{

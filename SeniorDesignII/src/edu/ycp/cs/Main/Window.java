@@ -2,26 +2,21 @@ package edu.ycp.cs.Main;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Random;
-
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-
-import edu.ycp.cs.Tetris.Game;
+import javax.swing.JTextField;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
@@ -29,9 +24,14 @@ public class Window {
 	final static String SPLASHSCREEN = "SplashScreen";
 	final static String MAINMENU = "MainMenu";
 	final static String TETRIS = "Tetris";
+	final static int GRID_ROW_HEIGHT = 30;
+	final static int NUM_ROWS = 20;
+	final static int NUM_COLS = 10;
+	JTable table = new JTable(new MyTableModel());
+	Tetris game = new Tetris(); 
 
 	public void addComponentToWindow(Container pane) {
-		// Create the "cards".
+		// Create the "cards"
 		final JPanel card1 = new JPanel();
 		final JPanel card2 = new JPanel();
 		final JPanel card3 = new JPanel();
@@ -87,46 +87,17 @@ public class Window {
 		gbc.gridy = 1;
 		startGame.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				Tetris game = new Tetris(); 
-				JTable table = new JTable(game.getNumRows(), game.getNumCols());
-				table.setRowHeight(30);
+			public void actionPerformed(ActionEvent e) {				
+				table.setDefaultRenderer(Object.class, new MyRenderer());
+				table.setRowHeight(GRID_ROW_HEIGHT);
+				table.setFocusable(false);
+				table.setRowSelectionAllowed(false);
 				for (int i = 0; i < game.getNumCols(); i++) {
-					table.getColumnModel().getColumn(i).setPreferredWidth(table.getRowHeight());
-					
-				}
+					table.getColumnModel().getColumn(i).setPreferredWidth(table.getRowHeight());					
+				}				
 				card3.add(table);
-				card3.remove(0); //Removes button card3.revalidate();
+				card3.remove(0); //Removes button
 				card3.revalidate(); //Redraws graphics
-				
-//				card3.remove(0); //remove start button
-//				
-//				Game game = new Game();
-//				int[][] oldGrid = null;
-//				int[][] newGrid = null;
-//				boolean firstTime = true;
-//				
-//				JButton[][] grid; // tetris grid of buttons
-//				card3.setLayout(new GridLayout(20, 10));
-//				grid = new JButton[20][10];
-//				for (int i = 0; i < 20; i++) {
-//					for (int j = 0; j < 10; j++) {
-//						grid[i][j] = new JButton();
-//						card3.add(grid[i][j]);
-//					}
-//				}
-//				card3.revalidate();
-
-//				while (true) {
-//					if (firstTime) {
-//						newGrid = game.gamePlay(null);
-//					} else {
-//						newGrid = game.gamePlay(oldGrid);
-//					}
-//
-//					oldGrid = newGrid;
-//					firstTime = false;
-//				}
 			}
 		});
 
@@ -139,25 +110,48 @@ public class Window {
 		// Creates the actual window
 		pane.add(cards, BorderLayout.CENTER);
 	}
-}
+	
+	public Color getTableCellBackground(JTable table, int row, int col) {
+        TableCellRenderer renderer = table.getCellRenderer(row, col);
+        Component component = table.prepareRenderer(renderer, row, col);    
+        return component.getBackground();
+    }
 
-//STUFF I MAY NEED FOR GAME CLASS
-//public int[][] gamePlay(int[][] grid) {
-//if (grid == null) {
-//	game = new Tetris();
-//	System.out.println("first time");
-//}
-//else {
-//	game.setGrid(grid);
-//}
-//try {
-//	Thread.sleep(1000);
-//} catch (InterruptedException e) {
-//	// TODO Auto-generated catch block
-//	e.printStackTrace();
-//}
-//game.move_Down();
-//game.print_Game();
-//
-//return game.getGrid();
-//}
+    class MyRenderer implements TableCellRenderer {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            JTextField editor = new JTextField();
+            if (value != null) {
+                editor.setText(value.toString());
+            }
+            if (game.getCur_color().getKey() == 0) {
+            	editor.setBackground(Color.WHITE);
+            }
+            else if (game.getCur_color().getKey() == 1) {
+            	editor.setBackground(Color.RED);
+            }
+            else if (game.getCur_color().getKey() == 2) {
+            	editor.setBackground(Color.GREEN);
+            }
+            else if (game.getCur_color().getKey() == 3) {
+            	editor.setBackground(Color.BLUE);
+            }
+            else if (game.getCur_color().getKey() == 4) {
+            	editor.setBackground(Color.YELLOW);
+            }
+            return editor;
+        }
+    }
+    
+    @SuppressWarnings("serial")
+	class MyTableModel extends AbstractTableModel {
+        public int getColumnCount() {
+            return NUM_COLS;
+        }
+        public int getRowCount() {
+            return NUM_ROWS;
+        }        
+        public Object getValueAt(int row, int col) {
+            return null;
+        }
+    }
+}
