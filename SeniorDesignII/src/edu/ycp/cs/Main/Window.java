@@ -22,15 +22,15 @@ import javax.swing.table.TableCellRenderer;
 import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
-	JPanel cards;
+	private JPanel cards;
 	final static String SPLASHSCREEN = "SplashScreen";
 	final static String MAINMENU = "MainMenu";
 	final static String TETRIS = "Tetris";
 	final static int GRID_ROW_HEIGHT = 30;
 	final static int NUM_ROWS = 20;
 	final static int NUM_COLS = 10;
-	JTable table = new JTable(new MyTableModel());
-	Tetris game = new Tetris(); 
+	private JTable table = new JTable(new MyTableModel());
+	private Tetris game = new Tetris(); 
 
 	public void addComponentToWindow(Container pane) {
 		// Create the "cards"
