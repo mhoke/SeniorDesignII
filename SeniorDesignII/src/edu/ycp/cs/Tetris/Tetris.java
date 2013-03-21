@@ -148,25 +148,32 @@ public class Tetris
 	
 	public void set_Piece()
 	{
-		boolean flag = true;
+		boolean flag;
 		
 		for(int j = 0; j < 20; j ++)
 		{
-			flag = true;
 			for(int i = 0; i < 10; i ++)
 			{
 				if(grid[i][j] == Pieces.CURRENT.getKey())
 				{
 					grid[i][j] = cur_color.getKey();
 				}
-				if(grid[i][j] == Pieces.BLANK.getKey())
+			}
+		}
+		
+		for(int i = 0; i < 20; i ++)
+		{
+			flag = true;
+			for(int j = 0; j < 10; j ++)
+			{
+				if(grid[j][i] == Pieces.BLANK.getKey())
 				{
 					flag = false;
 				}
-			}
-			if(flag == true)
-			{
-				remove_Row(j);
+				if(j == 9 && flag)
+				{
+					remove_Row(i);
+				}
 			}
 		}
 		
