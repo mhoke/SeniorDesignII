@@ -13,6 +13,7 @@ public class Tetris
 	Pieces next_color;
 	Style next_style;
 	boolean over;
+	boolean pause;
 	
 	public Tetris()
 	{
@@ -29,6 +30,7 @@ public class Tetris
 		next_color = Pieces.createColor();
 		next_style = Style.createStyle();
 		over = false;
+		pause = false;
 		
 		create_Piece();
 	}
@@ -607,6 +609,16 @@ public class Tetris
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	public void pause()
+	{
+		pause = !pause;
+	}
+	
+	public boolean getPause()
+	{
+		return pause;
 	}
 
 	public int[][] getGrid() 

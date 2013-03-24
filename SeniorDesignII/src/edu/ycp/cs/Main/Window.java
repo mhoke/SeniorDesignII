@@ -62,7 +62,6 @@ public class Window {
 		menuButton1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, TETRIS);
 			}
@@ -120,7 +119,6 @@ public class Window {
 
 					@Override
 					public void keyPressed(KeyEvent e) {
-						// TODO Auto-generated method stub
 						if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
 							System.out.println("pressed a");
 							game.move_Left();
@@ -141,6 +139,8 @@ public class Window {
 							game.rotate_right();
 							draw_grid_first_time();
 							card3.revalidate();
+						} else if (e.getKeyChar() == ' ') {
+							game.pause();
 						}
 					}
 				};
@@ -149,14 +149,15 @@ public class Window {
 				draw_grid_first_time();
 				card3.revalidate(); // Redraws graphics
 
-				Timer timer = new Timer(250, new ActionListener() {
+				Timer timer = new Timer(500, new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						game.move_Down();
-						draw_grid();
-						card3.revalidate(); // Redraws graphics
+						if (!game.getPause()) {
+							game.move_Down();
+							draw_grid();
+							card3.revalidate(); // Redraws graphics
+						}						
 					}
 
 					public void draw_grid() {
