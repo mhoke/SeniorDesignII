@@ -13,8 +13,7 @@ public class Main {
 
 		score.checkScore();
 
-		// Schedule a job for the event dispatch thread:
-		// creating and showing this application's GUI.
+		//Start GUI
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				makeGUI();
@@ -23,15 +22,15 @@ public class Main {
 	}
 
 	private static void makeGUI() {
-		// Create and set up the window.
+		//Create and set up the window.
 		JFrame frame = new JFrame("M&M Arcade");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		// Create and set up the content pane.
+		//Create and set up the content pane.
 		Window window = new Window();
 		window.addComponentToWindow(frame.getContentPane());
 
-		// Display the window.
+		//Display the window.
 		frame.pack();
 		frame.setVisible(true);
 	}

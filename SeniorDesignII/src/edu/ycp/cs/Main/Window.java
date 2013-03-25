@@ -25,14 +25,16 @@ import javax.swing.table.TableCellRenderer;
 import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
-	private JPanel cards;
 	final static String SPLASHSCREEN = "SplashScreen";
 	final static String MAINMENU = "MainMenu";
 	final static String TETRIS = "Tetris";
+	
 	final static int GRID_ROW_HEIGHT = 30;
 	final static int NUM_ROWS = 20;
 	final static int NUM_COLS = 10;
 	final static int TIMER = 250;
+	
+	private JPanel cards; //Used for card layout
 	private JTable table;
 	private JTable table2;
 	private MyTableModel model;
@@ -40,12 +42,12 @@ public class Window {
 	private Tetris game = new Tetris();	
 
 	public void addComponentToWindow(final Container pane) {
-		// Create the "cards"
+		//Create the "cards"
 		final JPanel card1 = new JPanel();
 		final JPanel card2 = new JPanel();
 		final JPanel card3 = new JPanel();
 
-		// Button for SplashScreen
+		//Button for SplashScreen
 		JButton continueButton = new JButton("CONTINUE TO MAIN MENU");
 		continueButton.addActionListener(new ActionListener() {
 			@Override
@@ -55,13 +57,13 @@ public class Window {
 			}
 		});
 
-		// SplashScreen setup
+		//SplashScreen setup
 		SplashScreen splash = new SplashScreen();
 		splash.setLayout(new FlowLayout());
 		card1.add(splash);
 		splash.add(continueButton);
 
-		// Buttons for MainMenu
+		//Buttons for MainMenu
 		JButton menuButton1 = new JButton("PLAY TETRIS");
 		menuButton1.addActionListener(new ActionListener() {
 			@Override
@@ -72,7 +74,7 @@ public class Window {
 		});
 		JButton menuButton2 = new JButton("HIGH SCORES");
 
-		// MainMenu setup
+		//MainMenu setup
 		MainMenuScreen mms = new MainMenuScreen();
 		mms.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -84,9 +86,8 @@ public class Window {
 		gbc.gridy = 1;
 		mms.add(menuButton2, gbc);
 
-		// Tetris setup
+		//Tetris setup
 		final JButton startGame = new JButton("START GAME");
-
 		card3.setLayout(new GridBagLayout());
 		final GridBagConstraints gbc2 = new GridBagConstraints();
 		gbc2.gridx = 0;
@@ -94,22 +95,19 @@ public class Window {
 		gbc2.insets = new Insets(2, 2, 2, 2);
 		card3.add(startGame, gbc2);
 
+		//Once user presses start game...
 		startGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				card3.remove(0); // Removes button
-				model = new MyTableModel();
-				model2 = new MyTableModel2();
+				card3.remove(0); // Removes start game button
+				
+				//Handles tetris grid
+				model = new MyTableModel();				
 				table = new JTable(model);
-				table2 = new JTable(model2);
 				table.setDefaultRenderer(Integer.class, new MyRenderer());
-				table2.setDefaultRenderer(Integer.class, new MyRenderer());
 				table.setRowHeight(GRID_ROW_HEIGHT);
-				table2.setRowHeight(20);
 				table.setFocusable(false);
-				table2.setFocusable(false);
 				table.setRowSelectionAllowed(true);
-				table2.setRowSelectionAllowed(true);
 				for (int i = 0; i < NUM_COLS; i++) {
 					table.getColumnModel().getColumn(i)
 							.setPreferredWidth(table.getRowHeight());
@@ -118,6 +116,14 @@ public class Window {
 					table.getColumnModel().getColumn(i)
 							.setMinWidth(table.getRowHeight());
 				}
+				
+				//Handles next piece grid and label
+				model2 = new MyTableModel2();
+				table2 = new JTable(model2);
+				table2.setDefaultRenderer(Integer.class, new MyRenderer());
+				table2.setRowHeight(20);
+				table2.setFocusable(false);
+				table2.setRowSelectionAllowed(true);
 				for (int i = 0; i < 5; i++) {
 					table2.getColumnModel().getColumn(i)
 							.setPreferredWidth(table2.getRowHeight());
@@ -126,9 +132,10 @@ public class Window {
 					table2.getColumnModel().getColumn(i)
 							.setMinWidth(table2.getRowHeight());
 				}
-				
 				JLabel nextPiece = new JLabel("Next Piece");
-				Container container = new Container();
+				
+				//Put components on card 3
+				Container container = new Container(); //Used for label and next piece grid
 				container.setLayout(new GridBagLayout());
 				GridBagConstraints gbc3 = new GridBagConstraints();
 				gbc3.gridx = 0;
@@ -137,35 +144,27 @@ public class Window {
 				container.add(nextPiece, gbc3);
 				gbc3.gridy++;
 				container.add(table2, gbc3);
-				
-				//card3.add(nextPiece, gbc2);
-				//gbc2.gridy++;
-				//card3.add(table2, gbc2);
-				card3.add(container);
+				card3.add(container);				
 				gbc2.gridx++;
-				//gbc2.gridy--;
-				card3.add(table, gbc2);
+				card3.add(table, gbc2);			
 				gbc2.gridx++;
 				JButton pauseButton = new JButton("Pause");
 				card3.add(pauseButton, gbc2);
+				card3.requestFocusInWindow(); //Needed to reset focus for keyboard interaction
 
+				//If pause button is pressed
 				pauseButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						game.pause();
+						card3.requestFocusInWindow(); //Needed to reset focus for keyboard interaction
 					}
-				});
-
-				card3.setFocusable(true);
-				card3.requestFocusInWindow();
-
+				});				
+				
+				//Check for user interaction with keyboard
 				KeyListener kl = new KeyListener() {
-					public void keyTyped(KeyEvent e) {
-					}
-
-					public void keyReleased(KeyEvent e) {
-					}
-
+					public void keyTyped(KeyEvent e) {}
+					public void keyReleased(KeyEvent e) {}
 					@Override
 					public void keyPressed(KeyEvent e) {
 						if (!game.getPause()) {
@@ -192,30 +191,23 @@ public class Window {
 						}
 						if (e.getKeyChar() == ' ') {
 							game.pause();
+							card3.requestFocusInWindow(); //Needed to reset focus for keyboard interaction
 						}
 					}
 				};
 				card3.addKeyListener(kl);
-
+				
 				draw_grid();
-				card3.revalidate(); // Redraws graphics
+				card3.revalidate(); //Redraws graphics on card3
 
+				//Actual loop for game
 				Timer timer = new Timer(TIMER, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (!game.getPause()) {
 							game.move_Down();
 							draw_grid();
-							card3.revalidate(); // Redraws graphics
-						}
-					}
-
-					public void draw_grid() {
-						for (int i = 0; i < game.getNumRows(); i++) {
-							for (int j = 0; j < game.getNumCols(); j++) {
-								int[][] grid = game.getGrid();
-								model.setValueAt(grid[j][i], i, j);
-							}
+							card3.revalidate(); //Redraws graphics on card3
 						}
 					}
 				});
@@ -228,16 +220,17 @@ public class Window {
 			}
 		});
 
-		// Sets up layout
+		//Sets up layout
 		cards = new JPanel(new CardLayout());
 		cards.add(card1, SPLASHSCREEN);
 		cards.add(card2, MAINMENU);
 		cards.add(card3, TETRIS);
 
-		// Creates the actual window
+		//Creates the actual window
 		pane.add(cards, BorderLayout.CENTER);
 	}
 
+	//Sets values in the grid
 	public void draw_grid() {
 		for (int i = 0; i < game.getNumRows(); i++) {
 			for (int j = 0; j < game.getNumCols(); j++) {
@@ -247,13 +240,14 @@ public class Window {
 		}
 	}
 
+	//Gets a color from a specific cell
 	public Color getTableCellBackground(JTable table, int row, int col) {
 		TableCellRenderer renderer = table.getCellRenderer(row, col);
 		Component component = table.prepareRenderer(renderer, row, col);
 		return component.getBackground();
 	}
 
-	// Render each cell as a background color dependent on grid from tetris game
+	//Render each cell as a background color dependent on grid from tetris game
 	@SuppressWarnings("serial")
 	class MyRenderer extends DefaultTableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table,
@@ -288,7 +282,7 @@ public class Window {
 		}
 	}
 
-	// Overwrite the Table Model to be what I want color wise
+	//Overwrite the Table Model to be what I want color-wise
 	@SuppressWarnings("serial")
 	class MyTableModel extends AbstractTableModel {
 		private int[][] values = new int[NUM_COLS][NUM_ROWS];
@@ -316,6 +310,7 @@ public class Window {
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	class MyTableModel2 extends AbstractTableModel {
 		private int[][] values = new int[5][5];
 
