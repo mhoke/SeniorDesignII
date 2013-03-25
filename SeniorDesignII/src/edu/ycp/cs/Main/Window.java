@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.Timer;
@@ -31,11 +32,14 @@ public class Window {
 	final static int GRID_ROW_HEIGHT = 30;
 	final static int NUM_ROWS = 20;
 	final static int NUM_COLS = 10;
+	final static int TIMER = 250;
 	private JTable table;
-	private Tetris game = new Tetris();
+	private JTable table2;
 	private MyTableModel model;
+	private MyTableModel2 model2;
+	private Tetris game = new Tetris();	
 
-	public void addComponentToWindow(Container pane) {
+	public void addComponentToWindow(final Container pane) {
 		// Create the "cards"
 		final JPanel card1 = new JPanel();
 		final JPanel card2 = new JPanel();
@@ -84,30 +88,66 @@ public class Window {
 		final JButton startGame = new JButton("START GAME");
 
 		card3.setLayout(new GridBagLayout());
-		GridBagConstraints gbc2 = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.insets = new Insets(2, 2, 2, 2);
+		final GridBagConstraints gbc2 = new GridBagConstraints();
+		gbc2.gridx = 0;
+		gbc2.gridy = 0;
+		gbc2.insets = new Insets(2, 2, 2, 2);
 		card3.add(startGame, gbc2);
-		gbc.gridy = 1;
 
 		startGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				card3.remove(0); // Removes button
 				model = new MyTableModel();
+				model2 = new MyTableModel2();
 				table = new JTable(model);
+				table2 = new JTable(model2);
 				table.setDefaultRenderer(Integer.class, new MyRenderer());
+				table2.setDefaultRenderer(Integer.class, new MyRenderer());
 				table.setRowHeight(GRID_ROW_HEIGHT);
+				table2.setRowHeight(20);
 				table.setFocusable(false);
+				table2.setFocusable(false);
 				table.setRowSelectionAllowed(true);
+				table2.setRowSelectionAllowed(true);
 				for (int i = 0; i < NUM_COLS; i++) {
 					table.getColumnModel().getColumn(i)
 							.setPreferredWidth(table.getRowHeight());
+					table.getColumnModel().getColumn(i)
+							.setMaxWidth(table.getRowHeight());
+					table.getColumnModel().getColumn(i)
+							.setMinWidth(table.getRowHeight());
 				}
-				card3.add(table);
+				for (int i = 0; i < 5; i++) {
+					table2.getColumnModel().getColumn(i)
+							.setPreferredWidth(table2.getRowHeight());
+					table2.getColumnModel().getColumn(i)
+							.setMaxWidth(table2.getRowHeight());
+					table2.getColumnModel().getColumn(i)
+							.setMinWidth(table2.getRowHeight());
+				}
+				
+				JLabel nextPiece = new JLabel("Next Piece");
+				Container container = new Container();
+				container.setLayout(new GridBagLayout());
+				GridBagConstraints gbc3 = new GridBagConstraints();
+				gbc3.gridx = 0;
+				gbc3.gridy = 0;
+				gbc3.insets = new Insets(2, 2, 2, 2);
+				container.add(nextPiece, gbc3);
+				gbc3.gridy++;
+				container.add(table2, gbc3);
+				
+				//card3.add(nextPiece, gbc2);
+				//gbc2.gridy++;
+				//card3.add(table2, gbc2);
+				card3.add(container);
+				gbc2.gridx++;
+				//gbc2.gridy--;
+				card3.add(table, gbc2);
+				gbc2.gridx++;
 				JButton pauseButton = new JButton("Pause");
-				card3.add(pauseButton);
+				card3.add(pauseButton, gbc2);
 
 				pauseButton.addActionListener(new ActionListener() {
 					@Override
@@ -160,7 +200,7 @@ public class Window {
 				draw_grid();
 				card3.revalidate(); // Redraws graphics
 
-				Timer timer = new Timer(500, new ActionListener() {
+				Timer timer = new Timer(TIMER, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (!game.getPause()) {
@@ -236,6 +276,12 @@ public class Window {
 			case 4:
 				return Color.YELLOW;
 			case 5:
+				return Color.CYAN;
+			case 6:
+				return Color.BLACK;
+			case 7:
+				return Color.MAGENTA;
+			case 8:
 				return Color.WHITE;
 			}
 			return Color.DARK_GRAY;
@@ -261,6 +307,32 @@ public class Window {
 
 		public void setValueAt(Object val, int row, int col) {
 			values[col][19 - row] = (Integer) val;
+			fireTableCellUpdated(row, col);
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return Integer.class;
+		}
+	}
+	
+	class MyTableModel2 extends AbstractTableModel {
+		private int[][] values = new int[5][5];
+
+		public int getColumnCount() {
+			return 5;
+		}
+
+		public int getRowCount() {
+			return 5;
+		}
+
+		public Object getValueAt(int row, int col) {
+			return values[col][row];
+		}
+
+		public void setValueAt(Object val, int row, int col) {
+			values[col][4 - row] = (Integer) val;
 			fireTableCellUpdated(row, col);
 		}
 

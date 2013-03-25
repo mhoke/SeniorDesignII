@@ -9,9 +9,12 @@ public enum Pieces
 	GREEN (2),
 	BLUE (3),
 	YELLOW (4),
-	CURRENT (5),
-	TWO (6),
-	ROTATE (7);
+	CYAN (5),
+	BLACK (6),
+	MAGENTA (7),
+	CURRENT (8),
+	TWO (9),
+	ROTATE (10);
 	
 	private int key;
 	
@@ -28,7 +31,7 @@ public enum Pieces
 	public static Pieces createColor()
 	{
 		Random random = new Random();
-		int val = random.nextInt(4) + 1;
+		int val = random.nextInt(7) + 1;
 		return Pieces.values()[val];
 	}
 }
