@@ -17,9 +17,9 @@ import java.awt.event.KeyListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import edu.ycp.cs.Tetris.Tetris;
 
@@ -97,7 +97,7 @@ public class Window {
 				card3.remove(0); // Removes button
 				model = new MyTableModel();
 				table = new JTable(model);
-				table.setDefaultRenderer(int.class, new MyRenderer());
+				table.setDefaultRenderer(Integer.class, new MyRenderer());
 				table.setRowHeight(GRID_ROW_HEIGHT);
 				table.setFocusable(false);
 				table.setRowSelectionAllowed(true);
@@ -106,6 +106,15 @@ public class Window {
 							.setPreferredWidth(table.getRowHeight());
 				}
 				card3.add(table);
+				JButton pauseButton = new JButton("Pause");
+				card3.add(pauseButton);
+
+				pauseButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						game.pause();
+					}
+				});
 
 				card3.setFocusable(true);
 				card3.requestFocusInWindow();
@@ -119,45 +128,46 @@ public class Window {
 
 					@Override
 					public void keyPressed(KeyEvent e) {
-						if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-							System.out.println("pressed a");
-							game.move_Left();
-							draw_grid_first_time();
-							card3.revalidate();
-						} else if (e.getKeyChar() == 'd'
-								|| e.getKeyChar() == 'D') {
-							game.move_Right();
-							draw_grid_first_time();
-							card3.revalidate();
-						} else if (e.getKeyChar() == 'q'
-								|| e.getKeyChar() == 'Q') {
-							game.rotate_left();
-							draw_grid_first_time();
-							card3.revalidate();
-						} else if (e.getKeyChar() == 'e'
-								|| e.getKeyChar() == 'E') {
-							game.rotate_right();
-							draw_grid_first_time();
-							card3.revalidate();
-						} else if (e.getKeyChar() == ' ') {
+						if (!game.getPause()) {
+							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+								game.move_Left();
+								draw_grid();
+								card3.revalidate();
+							} else if (e.getKeyChar() == 'd'
+									|| e.getKeyChar() == 'D') {
+								game.move_Right();
+								draw_grid();
+								card3.revalidate();
+							} else if (e.getKeyChar() == 'q'
+									|| e.getKeyChar() == 'Q') {
+								game.rotate_left();
+								draw_grid();
+								card3.revalidate();
+							} else if (e.getKeyChar() == 'e'
+									|| e.getKeyChar() == 'E') {
+								game.rotate_right();
+								draw_grid();
+								card3.revalidate();
+							}
+						}
+						if (e.getKeyChar() == ' ') {
 							game.pause();
 						}
 					}
 				};
 				card3.addKeyListener(kl);
 
-				draw_grid_first_time();
+				draw_grid();
 				card3.revalidate(); // Redraws graphics
 
 				Timer timer = new Timer(500, new ActionListener() {
-
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (!game.getPause()) {
 							game.move_Down();
 							draw_grid();
 							card3.revalidate(); // Redraws graphics
-						}						
+						}
 					}
 
 					public void draw_grid() {
@@ -188,7 +198,7 @@ public class Window {
 		pane.add(cards, BorderLayout.CENTER);
 	}
 
-	public void draw_grid_first_time() {
+	public void draw_grid() {
 		for (int i = 0; i < game.getNumRows(); i++) {
 			for (int j = 0; j < game.getNumCols(); j++) {
 				int[][] grid = game.getGrid();
@@ -204,26 +214,31 @@ public class Window {
 	}
 
 	// Render each cell as a background color dependent on grid from tetris game
-	class MyRenderer implements TableCellRenderer {
+	@SuppressWarnings("serial")
+	class MyRenderer extends DefaultTableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
-			JTextField editor = new JTextField();
-			if (value != null) {
-				editor.setText(value.toString());
+			Component c = super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
+			c.setBackground(getColor((Integer) value));
+			return c;
+		}
+
+		private Color getColor(Integer value) {
+			switch (value) {
+			case 1:
+				return Color.RED;
+			case 2:
+				return Color.GREEN;
+			case 3:
+				return Color.BLUE;
+			case 4:
+				return Color.YELLOW;
+			case 5:
+				return Color.WHITE;
 			}
-			if ((Integer) table.getValueAt(row, column) == 0) {
-				editor.setBackground(Color.DARK_GRAY);
-			} else if ((Integer) table.getValueAt(row, column) == 1) {
-				editor.setBackground(Color.RED);
-			} else if ((Integer) table.getValueAt(row, column) == 2) {
-				editor.setBackground(Color.GREEN);
-			} else if ((Integer) table.getValueAt(row, column) == 3) {
-				editor.setBackground(Color.BLUE);
-			} else if ((Integer) table.getValueAt(row, column) == 4) {
-				editor.setBackground(Color.YELLOW);
-			}
-			return editor;
+			return Color.DARK_GRAY;
 		}
 	}
 
@@ -247,6 +262,11 @@ public class Window {
 		public void setValueAt(Object val, int row, int col) {
 			values[col][19 - row] = (Integer) val;
 			fireTableCellUpdated(row, col);
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return Integer.class;
 		}
 	}
 }
