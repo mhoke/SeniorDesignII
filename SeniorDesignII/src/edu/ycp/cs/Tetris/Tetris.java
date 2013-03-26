@@ -175,6 +175,7 @@ public class Tetris
 				if(j == 9 && flag)
 				{
 					remove_Row(i);
+					i--;
 				}
 			}
 		}

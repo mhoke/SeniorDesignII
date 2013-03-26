@@ -209,14 +209,15 @@ public class Window {
 							draw_grid();
 							card3.revalidate(); //Redraws graphics on card3
 						}
+						if (game.isOver()) {
+							System.out.println("gfhj");
+							((Timer) arg0.getSource()).stop();
+						}
 					}
-				});
+				});								
 				timer.setRepeats(true);
 				timer.setCoalesce(true);
-				timer.start();
-				if (game.isOver()) {
-					timer.stop();
-				}
+				timer.start();				
 			}
 		});
 
@@ -276,7 +277,22 @@ public class Window {
 			case 7:
 				return Color.MAGENTA;
 			case 8:
-				return Color.WHITE;
+				switch (game.getCur_color().getKey()) {
+				case 1:
+					return Color.RED;
+				case 2:
+					return Color.GREEN;
+				case 3:
+					return Color.BLUE;
+				case 4:
+					return Color.YELLOW;
+				case 5:
+					return Color.CYAN;
+				case 6:
+					return Color.BLACK;
+				case 7:
+					return Color.MAGENTA;
+				}
 			}
 			return Color.DARK_GRAY;
 		}
