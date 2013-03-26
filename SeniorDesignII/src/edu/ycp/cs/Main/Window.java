@@ -83,7 +83,7 @@ public class Window {
 		gbc.insets = new Insets(2, 2, 2, 2);
 		card2.add(mms);
 		mms.add(menuButton1, gbc);
-		gbc.gridy = 1;
+		gbc.gridy++;
 		mms.add(menuButton2, gbc);
 
 		//Tetris setup
@@ -134,7 +134,8 @@ public class Window {
 				}
 				JLabel nextPiece = new JLabel("Next Piece");
 				
-				//Put components on card 3
+				//-----------------------Put components on card 3 -----------------------------
+				//Add next piece information
 				Container container = new Container(); //Used for label and next piece grid
 				container.setLayout(new GridBagLayout());
 				GridBagConstraints gbc3 = new GridBagConstraints();
@@ -144,13 +145,29 @@ public class Window {
 				container.add(nextPiece, gbc3);
 				gbc3.gridy++;
 				container.add(table2, gbc3);
-				card3.add(container);				
+				
+				//Adds tetris grid
+				card3.add(container, gbc2);				
 				gbc2.gridx++;
-				card3.add(table, gbc2);			
+				card3.add(table, gbc2);
 				gbc2.gridx++;
+				
+				//Add buttons
+				Container buttonContainer = new Container();
+				buttonContainer.setLayout(new GridBagLayout());
+				GridBagConstraints gbc4 = new GridBagConstraints();
+				gbc4.gridx = 0;
+				gbc4.gridy = 0;
+				gbc4.insets = new Insets(2, 2, 2, 2);				
 				JButton pauseButton = new JButton("Pause");
-				card3.add(pauseButton, gbc2);
+				buttonContainer.add(pauseButton, gbc4);
+				gbc4.gridy++;				
+				JButton restartButton = new JButton("Restart");				
+				buttonContainer.add(restartButton, gbc4);
+				
+				card3.add(buttonContainer, gbc2);				
 				card3.requestFocusInWindow(); //Needed to reset focus for keyboard interaction
+				//-----------------------------------------------------------------------------
 
 				//If pause button is pressed
 				pauseButton.addActionListener(new ActionListener() {
@@ -159,7 +176,9 @@ public class Window {
 						game.pause();
 						card3.requestFocusInWindow(); //Needed to reset focus for keyboard interaction
 					}
-				});				
+				});
+				
+				
 				
 				//Check for user interaction with keyboard
 				KeyListener kl = new KeyListener() {
@@ -201,7 +220,7 @@ public class Window {
 				card3.revalidate(); //Redraws graphics on card3
 
 				//Actual loop for game
-				Timer timer = new Timer(TIMER, new ActionListener() {
+				final Timer timer = new Timer(TIMER, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (!game.getPause()) {
@@ -217,7 +236,22 @@ public class Window {
 				});								
 				timer.setRepeats(true);
 				timer.setCoalesce(true);
-				timer.start();				
+				timer.start();
+				
+				//If restart button is pressed
+				restartButton.addActionListener(new ActionListener() {					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						card3.requestFocusInWindow(); //Needed to reset focus for keyboard interaction						
+						game = new Tetris();
+						draw_grid();
+						card3.revalidate(); //Redraws graphics on card3
+						timer.setRepeats(true);
+						timer.setCoalesce(true);
+						timer.start();
+						game.pause();
+					}
+				});
 			}
 		});
 
