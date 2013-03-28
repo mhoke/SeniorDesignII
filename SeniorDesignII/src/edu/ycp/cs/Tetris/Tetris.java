@@ -15,9 +15,14 @@ public class Tetris
 	boolean over;
 	boolean pause;
 	
+	int npgrid[][];
+	int npcur_row;
+	int npcur_col;
+	
 	public Tetris()
 	{
 		grid = new int[10][20];
+		npgrid = new int[5][6];
 		
 		for(int i = 0; i < 10; i ++)
 		{
@@ -25,7 +30,7 @@ public class Tetris
 			{
 				grid[i][j] = Pieces.BLANK.getKey();
 			}
-		}
+		}		
 		
 		next_color = Pieces.createColor();
 		next_style = Style.createStyle();
@@ -33,6 +38,7 @@ public class Tetris
 		pause = false;
 		
 		create_Piece();
+		create_NP();
 	}
 	
 	public void create_Piece()
@@ -129,9 +135,6 @@ public class Tetris
 				grid[4][18] = Pieces.CURRENT.getKey();
 				grid[3][19] = Pieces.CURRENT.getKey();
 			}
-			grid[5][19] = Pieces.CURRENT.getKey();
-			grid[4][18] = Pieces.CURRENT.getKey();
-			grid[3][19] = Pieces.CURRENT.getKey();
 		}
 		else if(cur_style == Style.Z)
 		{
@@ -146,6 +149,7 @@ public class Tetris
 				grid[3][18] = Pieces.CURRENT.getKey();
 			}
 		}
+		create_NP();
 	}
 	
 	public void set_Piece()
@@ -181,6 +185,75 @@ public class Tetris
 		}
 		
 		create_Piece();
+	}
+	
+	public void create_NP()
+	{	
+		for(int j = 0; j < 6; j++)
+		{
+			for(int i = 0; i < 5; i++)
+			{
+				npgrid[i][j] = 0;
+			}
+		}
+		
+		npgrid[2][2] = Pieces.CURRENT.getKey();
+		npgrid[2][3] = Pieces.CURRENT.getKey();
+		
+		if(next_style == Style.BOX)
+		{
+			npgrid[1][2] = Pieces.CURRENT.getKey();
+			npgrid[1][3] = Pieces.CURRENT.getKey();
+		}
+		else if(next_style == Style.RL)
+		{
+			npgrid[2][3] = 0;
+			npgrid[1][2] = Pieces.CURRENT.getKey();
+			npgrid[3][2] = Pieces.CURRENT.getKey();
+			npgrid[1][3] = Pieces.CURRENT.getKey();
+		}
+		else if(next_style == Style.L)
+		{
+			npgrid[2][2] = 0;
+			npgrid[1][3] = Pieces.CURRENT.getKey();
+			npgrid[1][2] = Pieces.CURRENT.getKey();
+			npgrid[3][3] = Pieces.CURRENT.getKey();
+		}
+		else if(next_style == Style.ROD)
+		{
+			npgrid[2][1] = Pieces.CURRENT.getKey();
+			npgrid[2][4] = Pieces.CURRENT.getKey();
+		}
+		else if(next_style == Style.RZ)
+		{
+			npgrid[3][2] = Pieces.CURRENT.getKey();
+			npgrid[1][3] = Pieces.CURRENT.getKey();
+		}
+		else if(next_style == Style.T)
+		{
+			npgrid[1][3] = Pieces.CURRENT.getKey();
+			npgrid[3][3] = Pieces.CURRENT.getKey();
+		}
+		else if(next_style == Style.Z)
+		{
+			npgrid[1][2] = Pieces.CURRENT.getKey();
+			npgrid[3][3] = Pieces.CURRENT.getKey();
+		}
+	}
+	
+	public void set_NP() 
+	{		
+		for(int j = 0; j < 6; j++)
+		{
+			for(int i = 0; i < 5; i++)
+			{
+				if(npgrid[i][j] == Pieces.CURRENT.getKey())
+				{
+					npgrid[i][j] = next_color.getKey();
+				}
+			}
+		}		
+		create_NP();
 	}
 	
 	public void remove_Row(int row)
@@ -610,6 +683,11 @@ public class Tetris
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	public int[][] getNextPieceGrid()
+	{
+		return npgrid;
 	}
 	
 	public void pause()
