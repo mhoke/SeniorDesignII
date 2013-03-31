@@ -5,6 +5,9 @@ import java.util.Random;
 
 public class Centipede 
 {
+	int NUM_ROWS = 20;
+	int NUM_COLS = 20;
+	
 	int head_row;
 	int head_col;
 	
@@ -12,6 +15,9 @@ public class Centipede
 	int next_col;
 	
 	int grid[][];
+	boolean pause;
+	
+	char currentDir = 'l';
 	
 	LinkedList<Coordinates> Centipede;
 	Coordinates Food;
@@ -46,8 +52,15 @@ public class Centipede
 		Food = placeFood();
 		
 		Over = false;
+		pause = false;
 	}
 	
+	public int getNumRows() {
+		return NUM_ROWS;
+	}
+	public int getNumCols() {
+		return NUM_COLS;
+	}
 	public int getHead_row() 
 	{
 		return head_row;
@@ -79,6 +92,21 @@ public class Centipede
 	public void setNext_col(int next_col) 
 	{
 		this.next_col = next_col;
+	}
+	public char getCurrentDir() {
+		return currentDir;
+	}
+	public void setCurrentDir(char c) {
+		this.currentDir = c;
+	}
+	public int[][] getGrid() {
+		return grid;
+	}
+	public boolean getPause() {
+		return pause;
+	}
+	public void pause() {
+		pause = !pause;
 	}
 	
 	public Coordinates placeFood()
@@ -140,6 +168,8 @@ public class Centipede
 	
 	public void Move(char m)
 	{		
+		currentDir = m; // Sets current direction for GUI
+		
 		if(m == 'l')
 		{
 			next_col = head_col - 1;
@@ -191,6 +221,7 @@ public class Centipede
 			
 			render_Game();
 		}
+		
 	}
 	
 	public void render_Game()
@@ -206,7 +237,7 @@ public class Centipede
 		{
 			grid[c.getX()][c.getY()] = Values.CENTIPEDE.getKey();
 		}
-		System.out.println("(" + Food.getX() + ", " + Food.getY() + ")");
+		//System.out.println("(" + Food.getX() + ", " + Food.getY() + ")");
 		grid[Food.getX()][Food.getY()] = Values.FOOD.getKey();
 	}
 	
@@ -251,5 +282,10 @@ public class Centipede
 		}
 		grid[temp_col][temp_row] = Values.FOOD.getKey();
 		Move(c);
+	}
+	
+	
+	public boolean isOver() {
+		return Over;
 	}
 }

@@ -22,12 +22,15 @@ import javax.swing.Timer;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+
+import edu.ycp.cs.Centipede.Centipede;
 import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
 	final static String SPLASHSCREEN = "SplashScreen";
 	final static String MAINMENU = "MainMenu";
 	final static String TETRIS = "Tetris";
+	final static String CENTIPEDE = "Centipede";
 
 	final static int GRID_ROW_HEIGHT = 30;
 	final static int NUM_ROWS = 20;
@@ -35,17 +38,21 @@ public class Window {
 	final static int TIMER = 250;
 
 	private JPanel cards; // Used for card layout
-	private JTable table;
-	private JTable table2;
-	private MyTableModel model;
-	private MyTableModel2 model2;
-	private Tetris game = new Tetris();
+	private JTable tetrisTable;
+	private JTable tetrisTable2;
+	private JTable centTable;
+	private MyTetrisTableModel tetrisModel;
+	private MyTetrisTableModel2 tetrisModel2;
+	private MyCentTableModel centModel;
+	private Tetris tetrisGame = new Tetris();
+	private Centipede centGame = new Centipede();
 
 	public void addComponentToWindow(final Container pane) {
 		// Create the "cards"
 		final JPanel card1 = new JPanel();
 		final JPanel card2 = new JPanel();
 		final JPanel card3 = new JPanel();
+		final JPanel card4 = new JPanel();
 
 		// Button for SplashScreen
 		JButton continueButton = new JButton("CONTINUE TO MAIN MENU");
@@ -74,6 +81,16 @@ public class Window {
 			}
 		});
 		JButton menuButton2 = new JButton("HIGH SCORES");
+		
+		JButton menuButton3 = new JButton("PLAY CENTIPEDE");
+		menuButton3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cards.add(card4, CENTIPEDE);
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, CENTIPEDE);				
+			}
+		});
 
 		// MAINMENU CARD setup
 		MainMenuScreen mms = new MainMenuScreen();
@@ -85,53 +102,55 @@ public class Window {
 		card2.add(mms);
 		mms.add(menuButton1, gbc);
 		gbc.gridy++;
+		mms.add(menuButton3, gbc);
+		gbc.gridy++;
 		mms.add(menuButton2, gbc);
 
 		// TETRIS CARD setup
-		final JButton startGame = new JButton("START GAME");
+		final JButton startGameTetris = new JButton("START GAME");
 		card3.setLayout(new GridBagLayout());
 		final GridBagConstraints gbc2 = new GridBagConstraints();
 		gbc2.gridx = 0;
 		gbc2.gridy = 0;
 		gbc2.insets = new Insets(2, 2, 2, 2);
-		card3.add(startGame, gbc2);
+		card3.add(startGameTetris, gbc2);
 
 		// Once user presses start game...
-		startGame.addActionListener(new ActionListener() {
+		startGameTetris.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				card3.remove(0); // Removes start game button
-
+				
 				// Handles tetris grid
-				model = new MyTableModel();
-				table = new JTable(model);
-				table.setDefaultRenderer(Integer.class, new MyRenderer());
-				table.setRowHeight(GRID_ROW_HEIGHT);
-				table.setFocusable(false);
-				table.setRowSelectionAllowed(true);
-				for (int i = 0; i < NUM_COLS; i++) {
-					table.getColumnModel().getColumn(i)
-							.setPreferredWidth(table.getRowHeight());
-					table.getColumnModel().getColumn(i)
-							.setMaxWidth(table.getRowHeight());
-					table.getColumnModel().getColumn(i)
-							.setMinWidth(table.getRowHeight());
+				tetrisModel = new MyTetrisTableModel();
+				tetrisTable = new JTable(tetrisModel);
+				tetrisTable.setDefaultRenderer(Integer.class, new MyTetrisRenderer());
+				tetrisTable.setRowHeight(GRID_ROW_HEIGHT);
+				tetrisTable.setFocusable(false);
+				tetrisTable.setRowSelectionAllowed(true);
+				for (int i = 0; i < tetrisGame.getNumCols(); i++) {
+					tetrisTable.getColumnModel().getColumn(i)
+							.setPreferredWidth(tetrisTable.getRowHeight());
+					tetrisTable.getColumnModel().getColumn(i)
+							.setMaxWidth(tetrisTable.getRowHeight());
+					tetrisTable.getColumnModel().getColumn(i)
+							.setMinWidth(tetrisTable.getRowHeight());
 				}
 
 				// Handles next piece grid and label
-				model2 = new MyTableModel2();
-				table2 = new JTable(model2);
-				table2.setDefaultRenderer(Integer.class, new MyRenderer2());
-				table2.setRowHeight(20);
-				table2.setFocusable(false);
-				table2.setRowSelectionAllowed(true);
+				tetrisModel2 = new MyTetrisTableModel2();
+				tetrisTable2 = new JTable(tetrisModel2);
+				tetrisTable2.setDefaultRenderer(Integer.class, new MyTetrisRenderer2());
+				tetrisTable2.setRowHeight(20);
+				tetrisTable2.setFocusable(false);
+				tetrisTable2.setRowSelectionAllowed(true);
 				for (int i = 0; i < 5; i++) {
-					table2.getColumnModel().getColumn(i)
-							.setPreferredWidth(table2.getRowHeight());
-					table2.getColumnModel().getColumn(i)
-							.setMaxWidth(table2.getRowHeight());
-					table2.getColumnModel().getColumn(i)
-							.setMinWidth(table2.getRowHeight());
+					tetrisTable2.getColumnModel().getColumn(i)
+							.setPreferredWidth(tetrisTable2.getRowHeight());
+					tetrisTable2.getColumnModel().getColumn(i)
+							.setMaxWidth(tetrisTable2.getRowHeight());
+					tetrisTable2.getColumnModel().getColumn(i)
+							.setMinWidth(tetrisTable2.getRowHeight());
 				}
 
 				// -----------------------Put components on card 3-----------------------------
@@ -145,12 +164,12 @@ public class Window {
 				gbc3.insets = new Insets(2, 2, 2, 2);
 				container.add(nextPiece, gbc3);
 				gbc3.gridy++;
-				container.add(table2, gbc3);
+				container.add(tetrisTable2, gbc3);
 
 				// Adds tetris grid
 				card3.add(container, gbc2);
 				gbc2.gridx++;
-				card3.add(table, gbc2);
+				card3.add(tetrisTable, gbc2);
 				gbc2.gridx++;
 
 				// Add buttons
@@ -177,66 +196,66 @@ public class Window {
 				pauseButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						game.pause();
+						tetrisGame.pause();
 						card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 					}
 				});
 
 				// Check for user interaction with keyboard
-				KeyListener kl = new KeyListener() {
+				KeyListener tkl = new KeyListener() {
 					public void keyTyped(KeyEvent e) {}
 					public void keyReleased(KeyEvent e) {}
 					@Override
 					public void keyPressed(KeyEvent e) {
-						if (!game.getPause() && !game.isOver()) {
+						if (!tetrisGame.getPause() && !tetrisGame.isOver()) {
 							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-								game.move_Left();
-								draw_grid();
+								tetrisGame.move_Left();
+								draw_tetris_grid();
 								card3.revalidate();
 							} else if (e.getKeyChar() == 'd'
 									|| e.getKeyChar() == 'D') {
-								game.move_Right();
-								draw_grid();
+								tetrisGame.move_Right();
+								draw_tetris_grid();
 								card3.revalidate();
 							} else if (e.getKeyChar() == 'q'
 									|| e.getKeyChar() == 'Q') {
-								game.rotate_left();
-								draw_grid();
+								tetrisGame.rotate_left();
+								draw_tetris_grid();
 								card3.revalidate();
 							} else if (e.getKeyChar() == 'e'
 									|| e.getKeyChar() == 'E') {
-								game.rotate_right();
-								draw_grid();
+								tetrisGame.rotate_right();
+								draw_tetris_grid();
 								card3.revalidate();
 							} else if (e.getKeyChar() == 's'
 									|| e.getKeyChar() == 'S') {
-								game.move_Down();
-								draw_grid();
+								tetrisGame.move_Down();
+								draw_tetris_grid();
 								card3.revalidate();
 							}
 						}
 						if (e.getKeyChar() == ' ') {
-							game.pause();
+							tetrisGame.pause();
 							card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 						}
 					}
 				};
-				card3.addKeyListener(kl);
+				card3.addKeyListener(tkl);
 
-				draw_grid();
+				draw_tetris_grid();
 				card3.revalidate(); // Redraws graphics on card3
 
 				// Actual loop for game
 				final Timer timer = new Timer(TIMER, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						if (!game.getPause()) {
-							game.move_Down();
-							draw_grid();
+						if (!tetrisGame.getPause()) {
+							tetrisGame.move_Down();
+							draw_tetris_grid();
 							draw_next_piece_grid();
 							card3.revalidate(); // Redraws graphics on card3
 						}
-						if (game.isOver()) {
+						if (tetrisGame.isOver()) {
 							System.out.println("GAME OVER PRESS RESTART!");
 							((Timer) arg0.getSource()).stop();
 						}
@@ -251,14 +270,14 @@ public class Window {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
-						game = new Tetris();
-						draw_grid();
+						tetrisGame = new Tetris();
+						draw_tetris_grid();
 						draw_next_piece_grid();
 						card3.revalidate(); // Redraws graphics on card3
 						timer.setRepeats(true);
 						timer.setCoalesce(true);
 						timer.start();
-						game.pause();
+						tetrisGame.pause();
 					}
 				});
 				
@@ -273,7 +292,141 @@ public class Window {
 				});
 			}
 		});
+		
+		// CENTIPEDE CARD setup
+		final JButton startGameCentipede = new JButton("START GAME");
+		card4.setLayout(new GridBagLayout());
+		final GridBagConstraints gbc5 = new GridBagConstraints();
+		gbc5.gridx = 0;
+		gbc5.gridy = 0;
+		gbc5.insets = new Insets(2, 2, 2, 2);
+		card4.add(startGameCentipede, gbc5);
+		
+		// Once user presses start game button...
+		startGameCentipede.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				card4.remove(0); // Removes start game button
 
+				// Handles centipede grid
+				centModel = new MyCentTableModel();
+				centTable = new JTable(centModel);
+				centTable.setDefaultRenderer(Integer.class, new MyCentRenderer());
+				centTable.setRowHeight(GRID_ROW_HEIGHT);
+				centTable.setFocusable(false);
+				centTable.setRowSelectionAllowed(true);
+				for (int i = 0; i < centGame.getNumCols(); i++) {
+					centTable.getColumnModel().getColumn(i)
+							.setPreferredWidth(centTable.getRowHeight());
+					centTable.getColumnModel().getColumn(i)
+							.setMaxWidth(centTable.getRowHeight());
+					centTable.getColumnModel().getColumn(i)
+							.setMinWidth(centTable.getRowHeight());
+				}
+
+				// Puts components on card 4
+				card4.add(centTable, gbc5);
+				gbc5.gridx++;
+				
+				Container centButtonContainer = new Container();
+				centButtonContainer.setLayout(new GridBagLayout());
+				GridBagConstraints gbc6 = new GridBagConstraints();
+				gbc6.gridx = 0;
+				gbc6.gridy = 0;
+				gbc6.insets = new Insets(2, 2, 2, 2);
+				JButton centPauseButton = new JButton("Pause");
+				centButtonContainer.add(centPauseButton, gbc6);
+				gbc6.gridy++;
+				JButton centRestartButton = new JButton("Restart");
+				centButtonContainer.add(centRestartButton, gbc6);
+				card4.add(centButtonContainer, gbc5);
+				card4.requestFocusInWindow();
+				
+				// If pause button is pressed
+				centPauseButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						centGame.pause();
+						card4.requestFocusInWindow();
+					}
+				});
+				
+				// Check for user interaction with keyboard
+				KeyListener ckl = new KeyListener() {
+					public void keyTyped(KeyEvent e) {}
+					public void keyReleased(KeyEvent e) {}
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if (!centGame.getPause() && !centGame.isOver()) {
+							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+								centGame.Move('l');
+								draw_centipede_grid();
+								card4.revalidate();
+							} else if (e.getKeyChar() == 'd'
+									|| e.getKeyChar() == 'D') {
+								centGame.Move('r');
+								draw_centipede_grid();
+								card4.revalidate();
+							} else if (e.getKeyChar() == 'w'
+									|| e.getKeyChar() == 'W') {
+								centGame.Move('u');
+								draw_centipede_grid();
+								card4.revalidate();
+							} else if (e.getKeyChar() == 's'
+									|| e.getKeyChar() == 'S') {
+								centGame.Move('d');
+								draw_centipede_grid();
+								card4.revalidate();
+							}
+						}
+						if (e.getKeyChar() == ' ') {
+							centGame.pause();
+							card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						}
+					}
+				};
+				card4.addKeyListener(ckl);
+
+				card4.requestFocusInWindow();
+				draw_centipede_grid();
+				card4.revalidate(); // Redraws graphics on card3
+				
+				// Actual loop for game
+				final Timer timer = new Timer(TIMER, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if (!centGame.getPause()) {
+							centGame.Move(centGame.getCurrentDir());
+							draw_centipede_grid();
+							card4.revalidate();
+						}
+						if (centGame.isOver()) {
+							System.out.println("GAME OVER PRESS RESTART!");
+							((Timer) arg0.getSource()).stop();
+						}
+					}
+				});
+				timer.setRepeats(true);
+				timer.setCoalesce(true);
+				timer.start();
+				
+				// If restart button is pressed
+				centRestartButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						centGame = new Centipede();
+						draw_centipede_grid();
+						card4.revalidate(); // Redraws graphics on card3
+						timer.setRepeats(true);
+						timer.setCoalesce(true);
+						timer.start();
+						centGame.pause();
+					}
+				});
+			}
+		});
+		
 		// Sets up layout
 		cards = new JPanel(new CardLayout());
 		cards.add(card1, SPLASHSCREEN);
@@ -284,11 +437,11 @@ public class Window {
 	}
 
 	// Sets values in the tetris grid
-	public void draw_grid() {
-		for (int i = 0; i < game.getNumRows(); i++) {
-			for (int j = 0; j < game.getNumCols(); j++) {
-				int[][] grid = game.getGrid();
-				model.setValueAt(grid[j][i], i, j);
+	public void draw_tetris_grid() {
+		for (int i = 0; i < tetrisGame.getNumRows(); i++) {
+			for (int j = 0; j < tetrisGame.getNumCols(); j++) {
+				int[][] grid = tetrisGame.getGrid();
+				tetrisModel.setValueAt(grid[j][i], i, j);
 			}
 		}
 	}
@@ -297,8 +450,18 @@ public class Window {
 	public void draw_next_piece_grid() {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 5; j++) {
-				int[][] npgrid = game.getNextPieceGrid();
-				model2.setValueAt(npgrid[j][i], i, j);
+				int[][] npgrid = tetrisGame.getNextPieceGrid();
+				tetrisModel2.setValueAt(npgrid[j][i], i, j);
+			}
+		}
+	}
+	
+	// Sets values in centipede grid
+	public void draw_centipede_grid() {
+		for (int i = 0; i < centGame.getNumRows(); i++) {
+			for (int j = 0; j < centGame.getNumCols(); j++) {
+				int[][] grid = centGame.getGrid();
+				centModel.setValueAt(grid[j][i], i, j);
 			}
 		}
 	}
@@ -312,7 +475,7 @@ public class Window {
 
 	// Render each cell as a background color dependent on grid for tetris game
 	@SuppressWarnings("serial")
-	class MyRenderer extends DefaultTableCellRenderer {
+	class MyTetrisRenderer extends DefaultTableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
@@ -339,7 +502,7 @@ public class Window {
 			case 7:
 				return Color.MAGENTA;
 			case 8:
-				switch (game.getCur_color().getKey()) {
+				switch (tetrisGame.getCur_color().getKey()) {
 				case 1:
 					return Color.RED;
 				case 2:
@@ -362,15 +525,15 @@ public class Window {
 
 	// Overwrite the Table Model to be what I want color-wise for tetris grid
 	@SuppressWarnings("serial")
-	class MyTableModel extends AbstractTableModel {
-		private int[][] values = new int[NUM_COLS][NUM_ROWS];
+	class MyTetrisTableModel extends AbstractTableModel {
+		private int[][] values = new int[tetrisGame.getNumCols()][tetrisGame.getNumRows()];
 
 		public int getColumnCount() {
-			return NUM_COLS;
+			return tetrisGame.getNumCols();
 		}
 
 		public int getRowCount() {
-			return NUM_ROWS;
+			return tetrisGame.getNumRows();
 		}
 
 		public Object getValueAt(int row, int col) {
@@ -390,7 +553,7 @@ public class Window {
 
 	// Render each cell as a background color dependent on grid from next piece grid
 	@SuppressWarnings("serial")
-	class MyRenderer2 extends DefaultTableCellRenderer {
+	class MyTetrisRenderer2 extends DefaultTableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
@@ -403,7 +566,7 @@ public class Window {
 		private Color getColor(Integer value) {
 			switch (value) {
 			case 8:
-				switch (game.getNext_color().getKey()) {
+				switch (tetrisGame.getNext_color().getKey()) {
 				case 1:
 					return Color.RED;
 				case 2:
@@ -426,7 +589,7 @@ public class Window {
 
 	// Next piece grid model
 	@SuppressWarnings("serial")
-	class MyTableModel2 extends AbstractTableModel {
+	class MyTetrisTableModel2 extends AbstractTableModel {
 		private int[][] values = new int[5][6];
 
 		public int getColumnCount() {
@@ -443,6 +606,57 @@ public class Window {
 
 		public void setValueAt(Object val, int row, int col) {
 			values[col][5 - row] = (Integer) val;
+			fireTableCellUpdated(row, col);
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return Integer.class;
+		}
+	}
+	
+	// Render each cell as a background color dependent on grid for tetris game
+	@SuppressWarnings("serial")
+	class MyCentRenderer extends DefaultTableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
+			c.setBackground(getColor((Integer) value));
+			return c;
+		}
+
+		private Color getColor(Integer value) {
+			switch (value) {
+			case 1:
+				return Color.GREEN;
+			case 2:
+				return Color.RED;
+			}
+			return Color.DARK_GRAY;
+		}
+	}
+
+	// Overwrite the Table Model to be what I want color-wise for tetris grid
+	@SuppressWarnings("serial")
+	class MyCentTableModel extends AbstractTableModel {
+		private int[][] values = new int[centGame.getNumCols()][centGame.getNumRows()];
+
+		public int getColumnCount() {
+			return centGame.getNumCols();
+		}
+
+		public int getRowCount() {
+			return centGame.getNumRows();
+		}
+
+		public Object getValueAt(int row, int col) {
+			return values[col][row];
+		}
+
+		public void setValueAt(Object val, int row, int col) {
+			values[col][19 - row] = (Integer) val;
 			fireTableCellUpdated(row, col);
 		}
 
