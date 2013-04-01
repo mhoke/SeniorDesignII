@@ -111,7 +111,7 @@ public class Centipede
 	
 	public Coordinates placeFood()
 	{
-		int blanks = getNumberofBlanks();
+		int blanks = 399 - Centipede.size();
 		
 		Random random = new Random();
 		int num = random.nextInt(blanks);
@@ -141,24 +141,6 @@ public class Centipede
 					{
 						current ++;
 					}
-				}
-			}
-		}
-		
-		return returnVal;
-	}
-
-	public int getNumberofBlanks()
-	{
-		int returnVal = 0;
-		
-		for(int i = 0; i < 20; i ++)
-		{
-			for(int j = 0; j < 20; j ++)
-			{
-				if(grid[i][j] == 0)
-				{
-					returnVal ++;
 				}
 			}
 		}
@@ -212,7 +194,7 @@ public class Centipede
 				}
 				else
 				{
-					placeFood();
+					Food = placeFood();
 				}
 				
 				head_row = next_row;
@@ -287,5 +269,10 @@ public class Centipede
 	
 	public boolean isOver() {
 		return Over;
+	}
+	
+	public int getScore()
+	{
+		return 50 * Centipede.size();
 	}
 }

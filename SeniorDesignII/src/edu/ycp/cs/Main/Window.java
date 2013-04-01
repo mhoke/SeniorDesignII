@@ -229,7 +229,7 @@ public class Window {
 								card3.revalidate();
 							} else if (e.getKeyChar() == 's'
 									|| e.getKeyChar() == 'S') {
-								tetrisGame.move_Down();
+								tetrisGame.drop_Piece();
 								draw_tetris_grid();
 								card3.revalidate();
 							}
@@ -258,6 +258,7 @@ public class Window {
 						if (tetrisGame.isOver()) {
 							System.out.println("GAME OVER PRESS RESTART!");
 							((Timer) arg0.getSource()).stop();
+							System.out.println("Final score is: " + tetrisGame.getScore());
 						}
 					}
 				});
@@ -403,6 +404,7 @@ public class Window {
 						if (centGame.isOver()) {
 							System.out.println("GAME OVER PRESS RESTART!");
 							((Timer) arg0.getSource()).stop();
+							System.out.println("Final score is: " + centGame.getScore());
 						}
 					}
 				});

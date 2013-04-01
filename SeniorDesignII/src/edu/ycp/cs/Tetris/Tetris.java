@@ -19,6 +19,8 @@ public class Tetris
 	int npcur_row;
 	int npcur_col;
 	
+	int score;
+	
 	public Tetris()
 	{
 		grid = new int[10][20];
@@ -36,6 +38,7 @@ public class Tetris
 		next_style = Style.createStyle();
 		over = false;
 		pause = false;
+		score = 0;
 		
 		create_Piece();
 		create_NP();
@@ -155,6 +158,7 @@ public class Tetris
 	public void set_Piece()
 	{
 		boolean flag;
+		int num_rows = 0;
 		
 		for(int j = 0; j < 20; j ++)
 		{
@@ -179,12 +183,63 @@ public class Tetris
 				if(j == 9 && flag)
 				{
 					remove_Row(i);
+					num_rows ++;
 					i--;
 				}
 			}
 		}
 		
+		if(num_rows != 0)
+		{
+			Score(num_rows);
+		}
+		
 		create_Piece();
+	}
+	
+	public void Score(int num_rows)
+	{
+		if(num_rows == 1)
+		{
+			score += 50;
+		}
+		else if(num_rows == 2)
+		{
+			score += 150;
+		}
+		else if(num_rows == 3)
+		{
+			score += 350;
+		}
+		else if(num_rows == 4)
+		{
+			score += 1000;
+		}
+		
+		if(board_is_clear())
+		{
+			score += 2000;
+		}
+	}
+	
+	public boolean board_is_clear()
+	{
+		boolean return_Val = true;
+		
+		for(int i = 0; i < 10; i ++)
+		{
+			for(int j = 0; j < 20; j ++)
+			{
+				if(grid[i][j] != Pieces.CURRENT.getKey())
+				{
+					return_Val = false;
+					j = 21;
+					i = 11;
+				}
+			}
+		}
+		
+		return return_Val;
 	}
 	
 	public void create_NP()
@@ -402,7 +457,7 @@ public class Tetris
 		}
 	}
 	
-	public void move_Down()
+	public boolean move_Down()
 	{
 		boolean flag = true;
 		
@@ -454,6 +509,13 @@ public class Tetris
 			
 			cur_row --;
 		}
+		
+		return flag;
+	}
+	
+	public void drop_Piece()
+	{
+		while(move_Down()){}
 	}
 	
 	public void rotate_right()
@@ -741,5 +803,10 @@ public class Tetris
 	public int getNumCols()
 	{
 		return NUM_COLS;
+	}
+	
+	public int getScore()
+	{
+		return score;
 	}
 }
