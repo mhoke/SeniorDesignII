@@ -82,6 +82,7 @@ public class Window {
 		});
 		JButton menuButton2 = new JButton("HIGH SCORES");
 		
+		// Button for Centipede
 		JButton menuButton3 = new JButton("PLAY CENTIPEDE");
 		menuButton3.addActionListener(new ActionListener() {
 			@Override
@@ -390,7 +391,7 @@ public class Window {
 
 				card4.requestFocusInWindow();
 				draw_centipede_grid();
-				card4.revalidate(); // Redraws graphics on card3
+				card4.revalidate(); // Redraws graphics on card4
 				
 				// Actual loop for game
 				final Timer timer = new Timer(TIMER, new ActionListener() {
@@ -419,7 +420,7 @@ public class Window {
 						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 						centGame = new Centipede();
 						draw_centipede_grid();
-						card4.revalidate(); // Redraws graphics on card3
+						card4.revalidate(); // Redraws graphics on card4
 						timer.setRepeats(true);
 						timer.setCoalesce(true);
 						timer.start();
