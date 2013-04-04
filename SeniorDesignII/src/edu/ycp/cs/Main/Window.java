@@ -46,6 +46,8 @@ public class Window {
 	private MyCentTableModel centModel;
 	private Tetris tetrisGame = new Tetris();
 	private Centipede centGame = new Centipede();
+	private boolean tetrisFlag = false;
+	private boolean centFlag = false;
 
 	public void addComponentToWindow(final Container pane) {
 		// Create the "cards"
@@ -76,6 +78,7 @@ public class Window {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cards.add(card3, TETRIS);
+				tetrisFlag = false;
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, TETRIS);
 			}
@@ -86,8 +89,9 @@ public class Window {
 		JButton menuButton3 = new JButton("PLAY CENTIPEDE");
 		menuButton3.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {				
 				cards.add(card4, CENTIPEDE);
+				centFlag = false;
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, CENTIPEDE);				
 			}
@@ -287,6 +291,7 @@ public class Window {
 				mainMenuButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						tetrisFlag = true;
 						cards.remove(card3);
 						CardLayout cl = (CardLayout) (cards.getLayout());
 						cl.show(cards, MAINMENU);				
@@ -341,6 +346,9 @@ public class Window {
 				gbc6.gridy++;
 				JButton centRestartButton = new JButton("Restart");
 				centButtonContainer.add(centRestartButton, gbc6);
+				gbc6.gridy++;
+				JButton centMainMenuButton = new JButton("Main Menu");
+				centButtonContainer.add(centMainMenuButton, gbc6);
 				card4.add(centButtonContainer, gbc5);
 				card4.requestFocusInWindow();
 				
@@ -427,6 +435,17 @@ public class Window {
 						centGame.pause();
 					}
 				});
+				
+				// If main menu button is pressed in centipede game
+				centMainMenuButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						cards.remove(card4);
+						centFlag = true;
+						CardLayout cl = (CardLayout) (cards.getLayout());
+						cl.show(cards, MAINMENU);				
+					}
+				});
 			}
 		});
 		
@@ -437,6 +456,12 @@ public class Window {
 
 		// Creates the actual window
 		pane.add(cards, BorderLayout.CENTER);
+	}
+	
+	public JPanel createNewTetrisCard(JPanel card) {
+		// TODO Auto-generated method stub
+		card = new JPanel();
+		return card;
 	}
 
 	// Sets values in the tetris grid
