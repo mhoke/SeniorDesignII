@@ -78,7 +78,6 @@ public class Window {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cards.add(card3, TETRIS);
-				tetrisFlag = false;
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, TETRIS);
 			}
@@ -91,7 +90,6 @@ public class Window {
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				cards.add(card4, CENTIPEDE);
-				centFlag = false;
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, CENTIPEDE);				
 			}
@@ -184,7 +182,7 @@ public class Window {
 				gbc4.gridx = 0;
 				gbc4.gridy = 0;
 				gbc4.insets = new Insets(2, 2, 2, 2);
-				JButton pauseButton = new JButton("Pause");
+				final JButton pauseButton = new JButton("Pause");
 				buttonContainer.add(pauseButton, gbc4);
 				gbc4.gridy++;
 				JButton restartButton = new JButton("Restart");
@@ -201,6 +199,10 @@ public class Window {
 				pauseButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						if (tetrisFlag) {
+							pauseButton.setText("Pause");
+							tetrisFlag = false;
+						}
 						tetrisGame.pause();
 						card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 					}
@@ -240,6 +242,10 @@ public class Window {
 							}
 						}
 						if (e.getKeyChar() == ' ') {
+							if (tetrisFlag) {
+								pauseButton.setText("Pause");
+								tetrisFlag = false;
+							}
 							tetrisGame.pause();
 							card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 						}
@@ -284,6 +290,8 @@ public class Window {
 						timer.setCoalesce(true);
 						timer.start();
 						tetrisGame.pause();
+						tetrisFlag = true;
+						pauseButton.setText("Start");						
 					}
 				});
 				
@@ -341,7 +349,7 @@ public class Window {
 				gbc6.gridx = 0;
 				gbc6.gridy = 0;
 				gbc6.insets = new Insets(2, 2, 2, 2);
-				JButton centPauseButton = new JButton("Pause");
+				final JButton centPauseButton = new JButton("Pause");
 				centButtonContainer.add(centPauseButton, gbc6);
 				gbc6.gridy++;
 				JButton centRestartButton = new JButton("Restart");
@@ -356,6 +364,10 @@ public class Window {
 				centPauseButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						if (centFlag) {
+							centPauseButton.setText("Pause");
+							centFlag = false;
+						}
 						centGame.pause();
 						card4.requestFocusInWindow();
 					}
@@ -390,6 +402,10 @@ public class Window {
 							}
 						}
 						if (e.getKeyChar() == ' ') {
+							if (centFlag) {
+								centPauseButton.setText("Pause");
+								centFlag = false;
+							}
 							centGame.pause();
 							card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 						}
@@ -427,12 +443,15 @@ public class Window {
 					public void actionPerformed(ActionEvent e) {
 						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 						centGame = new Centipede();
-						draw_centipede_grid();
+						centGame.Move('l');
+						draw_centipede_grid();						
 						card4.revalidate(); // Redraws graphics on card4
 						timer.setRepeats(true);
 						timer.setCoalesce(true);
 						timer.start();
 						centGame.pause();
+						centFlag = true;
+						centPauseButton.setText("Start");
 					}
 				});
 				
