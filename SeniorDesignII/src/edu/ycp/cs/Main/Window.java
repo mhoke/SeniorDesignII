@@ -27,10 +27,11 @@ import edu.ycp.cs.Centipede.Centipede;
 import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
-	final static String SPLASHSCREEN = "SplashScreen";
-	final static String MAINMENU = "MainMenu";
+	final static String SPLASHSCREEN = "Splash Screen";
+	final static String MAINMENU = "Main Menu";
 	final static String TETRIS = "Tetris";
 	final static String CENTIPEDE = "Centipede";
+	final static String SPACEINVADERS = "Space Invaders";
 
 	final static int GRID_ROW_HEIGHT = 30;
 	final static int NUM_ROWS = 20;
@@ -55,6 +56,7 @@ public class Window {
 		final JPanel card2 = new JPanel();
 		final JPanel card3 = new JPanel();
 		final JPanel card4 = new JPanel();
+		final JPanel card5 = new JPanel();
 
 		// Button for SplashScreen
 		JButton continueButton = new JButton("CONTINUE TO MAIN MENU");
@@ -92,6 +94,17 @@ public class Window {
 				cards.add(card4, CENTIPEDE);
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, CENTIPEDE);				
+			}
+		});
+		
+		// Button for Space Invaders
+		JButton menuButton4 = new JButton("PLAY SPACE INVADERS");
+		menuButton4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				cards.add(card5, SPACEINVADERS);
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, SPACEINVADERS);				
 			}
 		});
 
@@ -478,7 +491,6 @@ public class Window {
 	}
 	
 	public JPanel createNewTetrisCard(JPanel card) {
-		// TODO Auto-generated method stub
 		card = new JPanel();
 		return card;
 	}
@@ -529,6 +541,7 @@ public class Window {
 			Component c = super.getTableCellRendererComponent(table, value,
 					isSelected, hasFocus, row, column);
 			c.setBackground(getColor((Integer) value));
+			c.setForeground(getColor((Integer) value));
 			return c;
 		}
 
@@ -607,6 +620,7 @@ public class Window {
 			Component c = super.getTableCellRendererComponent(table, value,
 					isSelected, hasFocus, row, column);
 			c.setBackground(getColor((Integer) value));
+			c.setForeground(getColor((Integer) value));
 			return c;
 		}
 
@@ -671,6 +685,7 @@ public class Window {
 			Component c = super.getTableCellRendererComponent(table, value,
 					isSelected, hasFocus, row, column);
 			c.setBackground(getColor((Integer) value));
+			c.setForeground(getColor((Integer) value));
 			return c;
 		}
 
