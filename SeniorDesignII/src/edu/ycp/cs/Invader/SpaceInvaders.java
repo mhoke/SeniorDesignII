@@ -2,6 +2,7 @@ package edu.ycp.cs.Invader;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Random;
 
 public class SpaceInvaders 
 {
@@ -13,6 +14,7 @@ public class SpaceInvaders
 	
 	LinkedList<Alien> AlienList;
 	LinkedList<Barrier> BarrierList;
+	LinkedList<Laser> LaserList;
 	
 	Character character;
 	
@@ -31,6 +33,7 @@ public class SpaceInvaders
 		
 		AlienList = new LinkedList<Alien>();
 		BarrierList = new LinkedList<Barrier>();
+		LaserList = new LinkedList<Laser>();
 		
 		setBarriers();
 		setAliens();
@@ -121,6 +124,13 @@ public class SpaceInvaders
 				is_Over = true;
 			}
 		}
+		
+		Random random = new Random();
+		
+		if(random.nextInt(10) < 4)
+		{
+			createAlienLaser();
+		}
 	}
 	
 	public void killBarriers()
@@ -203,6 +213,49 @@ public class SpaceInvaders
 				}
 			}
 			System.out.println("");
+		}
+	}
+	
+	public void createAlienLaser()
+	{
+		LinkedList<Coordinates> list = new LinkedList<Coordinates>();
+		for(int i = 0; i < 20; i ++)
+		{
+			int temp = colContainsAlien(i);
+			if(temp != -1)
+			{
+				list.add(new Coordinates(i, temp));
+			}
+		}
+		
+		Random random = new Random();
+		
+		LaserList.add(new Laser(false, list.get(random.nextInt(list.size()))));
+	}
+	
+	public int colContainsAlien(int col)
+	{
+		for(int i = 0; i < 25; i ++)
+		{
+			if(grid[col][i].getClass().equals(Alien.class))
+			{
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public void createUserLaser()
+	{
+		int x = character.getLocation().getX();
+		int y = character.getLocation().getY() + 1;
+		
+		Laser laser = new Laser(true, new Coordinates(x, y));
+		
+		if(!LaserList.contains(laser))
+		{
+			LaserList.add(laser);
 		}
 	}
 	
