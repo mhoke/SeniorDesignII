@@ -24,6 +24,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import edu.ycp.cs.Centipede.Centipede;
+import edu.ycp.cs.Invader.Alien;
+import edu.ycp.cs.Invader.Barrier;
+import edu.ycp.cs.Invader.SpaceInvaders;
 import edu.ycp.cs.Tetris.Tetris;
 
 public class Window {
@@ -39,16 +42,24 @@ public class Window {
 	final static int TIMER = 250;
 
 	private JPanel cards; // Used for card layout
+	
 	private JTable tetrisTable;
 	private JTable tetrisTable2;
 	private JTable centTable;
+	private JTable siTable;
+	
 	private MyTetrisTableModel tetrisModel;
 	private MyTetrisTableModel2 tetrisModel2;
 	private MyCentTableModel centModel;
+	private MySITableModel siModel;
+	
 	private Tetris tetrisGame = new Tetris();
 	private Centipede centGame = new Centipede();
+	private SpaceInvaders siGame = new SpaceInvaders();
+	
 	private boolean tetrisFlag = false;
 	private boolean centFlag = false;
+	private boolean siFlag = false;
 
 	public void addComponentToWindow(final Container pane) {
 		// Create the "cards"
@@ -119,6 +130,8 @@ public class Window {
 		mms.add(menuButton1, gbc);
 		gbc.gridy++;
 		mms.add(menuButton3, gbc);
+		gbc.gridy++;
+		mms.add(menuButton4, gbc);
 		gbc.gridy++;
 		mms.add(menuButton2, gbc);
 
@@ -481,6 +494,170 @@ public class Window {
 			}
 		});
 		
+		// SPACE INVADERS CARD setup
+		final JButton startGameSI = new JButton("START GAME");
+		card5.setLayout(new GridBagLayout());
+		final GridBagConstraints gbc7 = new GridBagConstraints();
+		gbc7.gridx = 0;
+		gbc7.gridy = 0;
+		gbc7.insets = new Insets(2, 2, 2, 2);
+		card5.add(startGameSI, gbc7);
+		
+		// Once user presses start game button...
+		startGameSI.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				card5.remove(0); // Removes start game button
+
+				// Handles space invaders grid
+				siModel = new MySITableModel();
+				siTable = new JTable(siModel);
+				siTable.setDefaultRenderer(Object.class, new MySIRenderer());
+				siTable.setRowHeight(GRID_ROW_HEIGHT - 6);
+				siTable.setFocusable(false);
+				siTable.setRowSelectionAllowed(true);
+				for (int i = 0; i < siGame.getNumCols(); i++) {
+					siTable.getColumnModel().getColumn(i)
+							.setPreferredWidth(siTable.getRowHeight());
+					siTable.getColumnModel().getColumn(i)
+							.setMaxWidth(siTable.getRowHeight());
+					siTable.getColumnModel().getColumn(i)
+							.setMinWidth(siTable.getRowHeight());
+				}
+
+				// Puts components on card 5
+				card5.add(siTable, gbc7);
+				gbc7.gridx++;
+				
+				card5.requestFocusInWindow();
+				draw_si_grid();
+				card5.revalidate();
+				
+//				Container centButtonContainer = new Container();
+//				centButtonContainer.setLayout(new GridBagLayout());
+//				GridBagConstraints gbc6 = new GridBagConstraints();
+//				gbc6.gridx = 0;
+//				gbc6.gridy = 0;
+//				gbc6.insets = new Insets(2, 2, 2, 2);
+//				final JButton centPauseButton = new JButton("Pause");
+//				centButtonContainer.add(centPauseButton, gbc6);
+//				gbc6.gridy++;
+//				JButton centRestartButton = new JButton("Restart");
+//				centButtonContainer.add(centRestartButton, gbc6);
+//				gbc6.gridy++;
+//				JButton centMainMenuButton = new JButton("Main Menu");
+//				centButtonContainer.add(centMainMenuButton, gbc6);
+//				card4.add(centButtonContainer, gbc5);
+//				card4.requestFocusInWindow();
+//				
+//				// If pause button is pressed
+//				centPauseButton.addActionListener(new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						if (centFlag) {
+//							centPauseButton.setText("Pause");
+//							centFlag = false;
+//						}
+//						centGame.pause();
+//						card4.requestFocusInWindow();
+//					}
+//				});
+//				
+//				// Check for user interaction with keyboard
+//				KeyListener ckl = new KeyListener() {
+//					public void keyTyped(KeyEvent e) {}
+//					public void keyReleased(KeyEvent e) {}
+//					@Override
+//					public void keyPressed(KeyEvent e) {
+//						if (!centGame.getPause() && !centGame.isOver()) {
+//							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+//								centGame.Move('l');
+//								draw_centipede_grid();
+//								card4.revalidate();
+//							} else if (e.getKeyChar() == 'd'
+//									|| e.getKeyChar() == 'D') {
+//								centGame.Move('r');
+//								draw_centipede_grid();
+//								card4.revalidate();
+//							} else if (e.getKeyChar() == 'w'
+//									|| e.getKeyChar() == 'W') {
+//								centGame.Move('u');
+//								draw_centipede_grid();
+//								card4.revalidate();
+//							} else if (e.getKeyChar() == 's'
+//									|| e.getKeyChar() == 'S') {
+//								centGame.Move('d');
+//								draw_centipede_grid();
+//								card4.revalidate();
+//							}
+//						}
+//						if (e.getKeyChar() == ' ') {
+//							if (centFlag) {
+//								centPauseButton.setText("Pause");
+//								centFlag = false;
+//							}
+//							centGame.pause();
+//							card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+//						}
+//					}
+//				};
+//				card4.addKeyListener(ckl);
+//
+//				card4.requestFocusInWindow();
+//				draw_centipede_grid();
+//				card4.revalidate(); // Redraws graphics on card4
+//				
+//				// Actual loop for game
+//				final Timer timer = new Timer(TIMER, new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent arg0) {
+//						if (!centGame.getPause()) {
+//							centGame.Move(centGame.getCurrentDir());
+//							draw_centipede_grid();
+//							card4.revalidate();
+//						}
+//						if (centGame.isOver()) {
+//							System.out.println("GAME OVER PRESS RESTART!");
+//							((Timer) arg0.getSource()).stop();
+//							System.out.println("Final score is: " + centGame.getScore());
+//						}
+//					}
+//				});
+//				timer.setRepeats(true);
+//				timer.setCoalesce(true);
+//				timer.start();
+//				
+//				// If restart button is pressed
+//				centRestartButton.addActionListener(new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+//						centGame = new Centipede();
+//						centGame.Move('l');
+//						draw_centipede_grid();						
+//						card4.revalidate(); // Redraws graphics on card4
+//						timer.setRepeats(true);
+//						timer.setCoalesce(true);
+//						timer.start();
+//						centGame.pause();
+//						centFlag = true;
+//						centPauseButton.setText("Start");
+//					}
+//				});
+//				
+//				// If main menu button is pressed in centipede game
+//				centMainMenuButton.addActionListener(new ActionListener() {
+//					@Override
+//					public void actionPerformed(ActionEvent e) {
+//						cards.remove(card4);
+//						centFlag = true;
+//						CardLayout cl = (CardLayout) (cards.getLayout());
+//						cl.show(cards, MAINMENU);				
+//					}
+//				});
+			}
+		});
+		
 		// Sets up layout
 		cards = new JPanel(new CardLayout());
 		cards.add(card1, SPLASHSCREEN);
@@ -521,6 +698,16 @@ public class Window {
 			for (int j = 0; j < centGame.getNumCols(); j++) {
 				int[][] grid = centGame.getGrid();
 				centModel.setValueAt(grid[j][i], i, j);
+			}
+		}
+	}
+	
+	// Sets values in space invaders grid
+	public void draw_si_grid() {
+		for (int i = 0; i < siGame.getNumRows(); i++) {
+			for (int j = 0; j < siGame.getNumCols(); j++) {
+				Object[][] grid = siGame.getGrid();
+				siModel.setValueAt(grid[j][i], i, j);
 			}
 		}
 	}
@@ -676,7 +863,7 @@ public class Window {
 		}
 	}
 	
-	// Render each cell as a background color dependent on grid for tetris game
+	// Render each cell as a background color dependent on grid for centipede game
 	@SuppressWarnings("serial")
 	class MyCentRenderer extends DefaultTableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table,
@@ -700,7 +887,7 @@ public class Window {
 		}
 	}
 
-	// Overwrite the Table Model to be what I want color-wise for tetris grid
+	// Overwrite the Table Model to be what I want color-wise for centipede grid
 	@SuppressWarnings("serial")
 	class MyCentTableModel extends AbstractTableModel {
 		private int[][] values = new int[centGame.getNumCols()][centGame.getNumRows()];
@@ -725,6 +912,63 @@ public class Window {
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
 			return Integer.class;
+		}
+	}
+	
+	// Render each cell as a background color dependent on grid for space invaders game
+	@SuppressWarnings("serial")
+	class MySIRenderer extends DefaultTableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value,
+					isSelected, hasFocus, row, column);
+			c.setBackground(getColor((Object) value));
+			return c;
+		}
+
+		private Color getColor(Object value) {
+			// get grid object (alien, barrier, or character) and use certain color for each
+			if (value.getClass().equals(Barrier.class)) {
+				return Color.BLACK;
+			}
+			else if (value.getClass().equals(Alien.class)) {
+				return Color.CYAN;
+			}
+			else if (value.getClass().equals(edu.ycp.cs.Invader.Character.class)) {
+				return Color.GREEN;
+			}
+			else {
+				return Color.DARK_GRAY;
+			}
+		}
+	}
+
+	// Overwrite the Table Model to be what I want color-wise for space invaders grid
+	@SuppressWarnings("serial")
+	class MySITableModel extends AbstractTableModel {
+		private Object[][] values = new Object[siGame.getNumCols()][siGame.getNumRows()];
+
+		public int getColumnCount() {
+			return siGame.getNumCols();
+		}
+
+		public int getRowCount() {
+			return siGame.getNumRows();
+		}
+
+		public Object getValueAt(int row, int col) {
+			return values[col][row];
+		}
+
+		public void setValueAt(Object val, int row, int col) {
+			values[col][24 - row] = val;
+			fireTableCellUpdated(row, col);
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return Object.class;
 		}
 	}
 }

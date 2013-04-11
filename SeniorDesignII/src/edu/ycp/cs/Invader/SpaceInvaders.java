@@ -5,6 +5,9 @@ import java.util.ListIterator;
 
 public class SpaceInvaders 
 {
+	int NUM_ROWS = 25;
+	int NUM_COLS = 20;
+	
 	boolean move_Left;
 //	Coordinates top_left;
 //	Coordinates bottom_right;
@@ -38,6 +41,14 @@ public class SpaceInvaders
 		character = new Character(7, 0);
 		
 		renderGrid();
+	}
+	
+	public int getNumRows() {
+		return NUM_ROWS;
+	}
+	
+	public int getNumCols() {
+		return NUM_COLS;
 	}
 	
 	public void setBarriers()
