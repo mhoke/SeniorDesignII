@@ -525,89 +525,80 @@ public class Window {
 							.setMinWidth(siTable.getRowHeight());
 				}
 
-				// Puts components on card 5
+				// Puts components on card5
 				card5.add(siTable, gbc7);
 				gbc7.gridx++;
+								
+				Container siButtonContainer = new Container();
+				siButtonContainer.setLayout(new GridBagLayout());
+				GridBagConstraints gbc8 = new GridBagConstraints();
+				gbc8.gridx = 0;
+				gbc8.gridy = 0;
+				gbc8.insets = new Insets(2, 2, 2, 2);
+				final JButton siPauseButton = new JButton("Pause");
+				siButtonContainer.add(siPauseButton, gbc8);
+				gbc8.gridy++;
+				JButton siRestartButton = new JButton("Restart");
+				siButtonContainer.add(siRestartButton, gbc8);
+				gbc8.gridy++;
+				JButton siMainMenuButton = new JButton("Main Menu");
+				siButtonContainer.add(siMainMenuButton, gbc8);
+				card5.add(siButtonContainer, gbc7);
+				card5.requestFocusInWindow();
 				
+				// If pause button is pressed
+				siPauseButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if (siFlag) {
+							siPauseButton.setText("Pause");
+							siFlag = false;
+						}
+						siGame.pause();
+						card5.requestFocusInWindow();
+					}
+				});
+				
+				// Check for user interaction with keyboard
+				KeyListener skl = new KeyListener() {
+					public void keyTyped(KeyEvent e) {}
+					public void keyReleased(KeyEvent e) {}
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if (!siGame.getPause() && !siGame.isOver()) {
+							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+								//siGame.MOVELEFT
+								draw_si_grid();
+								card5.revalidate();
+							} else if (e.getKeyChar() == 'd'
+									|| e.getKeyChar() == 'D') {
+								//siGame.MOVERIGHT
+								draw_si_grid();
+								card5.revalidate();
+							} else if (e.getKeyChar() == 's'
+									|| e.getKeyChar() == 'S') {
+								//siGame.SHOOTLASER
+								draw_si_grid();
+								card5.revalidate();
+							}
+						}
+						if (e.getKeyChar() == ' ') {
+							if (siFlag) {
+								siPauseButton.setText("Pause");
+								siFlag = false;
+							}
+							siGame.pause();
+							card5.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						}
+					}
+				};
+				card5.addKeyListener(skl);
+
 				card5.requestFocusInWindow();
 				draw_si_grid();
-				card5.revalidate();
+				card5.revalidate(); // Redraws graphics on card5
 				
-//				Container centButtonContainer = new Container();
-//				centButtonContainer.setLayout(new GridBagLayout());
-//				GridBagConstraints gbc6 = new GridBagConstraints();
-//				gbc6.gridx = 0;
-//				gbc6.gridy = 0;
-//				gbc6.insets = new Insets(2, 2, 2, 2);
-//				final JButton centPauseButton = new JButton("Pause");
-//				centButtonContainer.add(centPauseButton, gbc6);
-//				gbc6.gridy++;
-//				JButton centRestartButton = new JButton("Restart");
-//				centButtonContainer.add(centRestartButton, gbc6);
-//				gbc6.gridy++;
-//				JButton centMainMenuButton = new JButton("Main Menu");
-//				centButtonContainer.add(centMainMenuButton, gbc6);
-//				card4.add(centButtonContainer, gbc5);
-//				card4.requestFocusInWindow();
-//				
-//				// If pause button is pressed
-//				centPauseButton.addActionListener(new ActionListener() {
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						if (centFlag) {
-//							centPauseButton.setText("Pause");
-//							centFlag = false;
-//						}
-//						centGame.pause();
-//						card4.requestFocusInWindow();
-//					}
-//				});
-//				
-//				// Check for user interaction with keyboard
-//				KeyListener ckl = new KeyListener() {
-//					public void keyTyped(KeyEvent e) {}
-//					public void keyReleased(KeyEvent e) {}
-//					@Override
-//					public void keyPressed(KeyEvent e) {
-//						if (!centGame.getPause() && !centGame.isOver()) {
-//							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-//								centGame.Move('l');
-//								draw_centipede_grid();
-//								card4.revalidate();
-//							} else if (e.getKeyChar() == 'd'
-//									|| e.getKeyChar() == 'D') {
-//								centGame.Move('r');
-//								draw_centipede_grid();
-//								card4.revalidate();
-//							} else if (e.getKeyChar() == 'w'
-//									|| e.getKeyChar() == 'W') {
-//								centGame.Move('u');
-//								draw_centipede_grid();
-//								card4.revalidate();
-//							} else if (e.getKeyChar() == 's'
-//									|| e.getKeyChar() == 'S') {
-//								centGame.Move('d');
-//								draw_centipede_grid();
-//								card4.revalidate();
-//							}
-//						}
-//						if (e.getKeyChar() == ' ') {
-//							if (centFlag) {
-//								centPauseButton.setText("Pause");
-//								centFlag = false;
-//							}
-//							centGame.pause();
-//							card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
-//						}
-//					}
-//				};
-//				card4.addKeyListener(ckl);
-//
-//				card4.requestFocusInWindow();
-//				draw_centipede_grid();
-//				card4.revalidate(); // Redraws graphics on card4
-//				
-//				// Actual loop for game
+				// Actual loop for game
 //				final Timer timer = new Timer(TIMER, new ActionListener() {
 //					@Override
 //					public void actionPerformed(ActionEvent arg0) {
@@ -626,35 +617,34 @@ public class Window {
 //				timer.setRepeats(true);
 //				timer.setCoalesce(true);
 //				timer.start();
-//				
-//				// If restart button is pressed
-//				centRestartButton.addActionListener(new ActionListener() {
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
-//						centGame = new Centipede();
-//						centGame.Move('l');
-//						draw_centipede_grid();						
-//						card4.revalidate(); // Redraws graphics on card4
-//						timer.setRepeats(true);
-//						timer.setCoalesce(true);
-//						timer.start();
-//						centGame.pause();
-//						centFlag = true;
-//						centPauseButton.setText("Start");
-//					}
-//				});
-//				
-//				// If main menu button is pressed in centipede game
-//				centMainMenuButton.addActionListener(new ActionListener() {
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-//						cards.remove(card4);
-//						centFlag = true;
-//						CardLayout cl = (CardLayout) (cards.getLayout());
-//						cl.show(cards, MAINMENU);				
-//					}
-//				});
+				
+				// If restart button is pressed
+				siRestartButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						card5.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						siGame = new SpaceInvaders();
+						draw_si_grid();						
+						card5.revalidate(); // Redraws graphics on card5
+						//timer.setRepeats(true);
+						//timer.setCoalesce(true);
+						//timer.start();
+						siGame.pause();
+						siFlag = true;
+						siPauseButton.setText("Start");
+					}
+				});
+				
+				// If main menu button is pressed in space invaders game
+				siMainMenuButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						cards.remove(card5);
+						siFlag = true;
+						CardLayout cl = (CardLayout) (cards.getLayout());
+						cl.show(cards, MAINMENU);				
+					}
+				});
 			}
 		});
 		
