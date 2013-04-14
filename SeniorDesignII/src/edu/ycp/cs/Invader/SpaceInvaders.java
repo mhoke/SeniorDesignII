@@ -61,6 +61,14 @@ public class SpaceInvaders
 		return NUM_COLS;
 	}
 	
+	public void characterMoveLeft() {
+		character.moveLeft();
+	}
+	
+	public void characterMoveRight() {
+		character.moveRight();
+	}
+	
 	public void setBarriers()
 	{	
 		createBarrier(1, 4);

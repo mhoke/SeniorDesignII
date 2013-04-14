@@ -185,48 +185,48 @@ public class Window {
 				// -----------------------Put components on card 3-----------------------------
 				// Add next piece information
 				JLabel nextPiece = new JLabel("Next Piece");
-				Container container = new Container(); // Used for label and next piece grid
-				container.setLayout(new GridBagLayout());
+				Container tetrisContainer = new Container(); // Used for label and next piece grid
+				tetrisContainer.setLayout(new GridBagLayout());
 				GridBagConstraints gbc3 = new GridBagConstraints();
 				gbc3.gridx = 0;
 				gbc3.gridy = 0;
 				gbc3.insets = new Insets(2, 2, 2, 2);
-				container.add(nextPiece, gbc3);
+				tetrisContainer.add(nextPiece, gbc3);
 				gbc3.gridy++;
-				container.add(tetrisTable2, gbc3);
+				tetrisContainer.add(tetrisTable2, gbc3);
 
 				// Adds tetris grid
-				card3.add(container, gbc2);
+				card3.add(tetrisContainer, gbc2);
 				gbc2.gridx++;
 				card3.add(tetrisTable, gbc2);
 				gbc2.gridx++;
 
 				// Add buttons
-				Container buttonContainer = new Container();
-				buttonContainer.setLayout(new GridBagLayout());
+				Container tetrisButtonContainer = new Container();
+				tetrisButtonContainer.setLayout(new GridBagLayout());
 				GridBagConstraints gbc4 = new GridBagConstraints();
 				gbc4.gridx = 0;
 				gbc4.gridy = 0;
 				gbc4.insets = new Insets(2, 2, 2, 2);
-				final JButton pauseButton = new JButton("Pause");
-				buttonContainer.add(pauseButton, gbc4);
+				final JButton tetrisPauseButton = new JButton("Pause");
+				tetrisButtonContainer.add(tetrisPauseButton, gbc4);
 				gbc4.gridy++;
-				JButton restartButton = new JButton("Restart");
-				buttonContainer.add(restartButton, gbc4);
+				JButton tetrisRestartButton = new JButton("Restart");
+				tetrisButtonContainer.add(tetrisRestartButton, gbc4);
 				gbc4.gridy++;
 				JButton mainMenuButton = new JButton("Main Menu");
-				buttonContainer.add(mainMenuButton, gbc4);
+				tetrisButtonContainer.add(mainMenuButton, gbc4);
 
-				card3.add(buttonContainer, gbc2);
+				card3.add(tetrisButtonContainer, gbc2);
 				card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 				// -----------------------------------------------------------------------------
 
 				// If pause button is pressed
-				pauseButton.addActionListener(new ActionListener() {
+				tetrisPauseButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						if (tetrisFlag) {
-							pauseButton.setText("Pause");
+							tetrisPauseButton.setText("Pause");
 							tetrisFlag = false;
 						}
 						tetrisGame.pause();
@@ -269,7 +269,7 @@ public class Window {
 						}
 						if (e.getKeyChar() == ' ') {
 							if (tetrisFlag) {
-								pauseButton.setText("Pause");
+								tetrisPauseButton.setText("Pause");
 								tetrisFlag = false;
 							}
 							tetrisGame.pause();
@@ -283,7 +283,7 @@ public class Window {
 				card3.revalidate(); // Redraws graphics on card3
 
 				// Actual loop for game
-				final Timer timer = new Timer(TIMER, new ActionListener() {
+				final Timer tetrisTimer = new Timer(TIMER, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (!tetrisGame.getPause()) {
@@ -299,12 +299,12 @@ public class Window {
 						}
 					}
 				});
-				timer.setRepeats(true);
-				timer.setCoalesce(true);
-				timer.start();
+				tetrisTimer.setRepeats(true);
+				tetrisTimer.setCoalesce(true);
+				tetrisTimer.start();
 
 				// If restart button is pressed
-				restartButton.addActionListener(new ActionListener() {
+				tetrisRestartButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
@@ -312,12 +312,12 @@ public class Window {
 						draw_tetris_grid();
 						draw_next_piece_grid();
 						card3.revalidate(); // Redraws graphics on card3
-						timer.setRepeats(true);
-						timer.setCoalesce(true);
-						timer.start();
+						tetrisTimer.setRepeats(true);
+						tetrisTimer.setCoalesce(true);
+						tetrisTimer.start();
 						tetrisGame.pause();
 						tetrisFlag = true;
-						pauseButton.setText("Start");						
+						tetrisPauseButton.setText("Start");						
 					}
 				});
 				
@@ -444,7 +444,7 @@ public class Window {
 				card4.revalidate(); // Redraws graphics on card4
 				
 				// Actual loop for game
-				final Timer timer = new Timer(TIMER, new ActionListener() {
+				final Timer centTimer = new Timer(TIMER, new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						if (!centGame.getPause()) {
@@ -459,9 +459,9 @@ public class Window {
 						}
 					}
 				});
-				timer.setRepeats(true);
-				timer.setCoalesce(true);
-				timer.start();
+				centTimer.setRepeats(true);
+				centTimer.setCoalesce(true);
+				centTimer.start();
 				
 				// If restart button is pressed
 				centRestartButton.addActionListener(new ActionListener() {
@@ -472,9 +472,9 @@ public class Window {
 						centGame.Move('l');
 						draw_centipede_grid();						
 						card4.revalidate(); // Redraws graphics on card4
-						timer.setRepeats(true);
-						timer.setCoalesce(true);
-						timer.start();
+						centTimer.setRepeats(true);
+						centTimer.setCoalesce(true);
+						centTimer.start();
 						centGame.pause();
 						centFlag = true;
 						centPauseButton.setText("Start");
@@ -567,12 +567,12 @@ public class Window {
 					public void keyPressed(KeyEvent e) {
 						if (!siGame.getPause() && !siGame.isOver()) {
 							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-								//siGame.MOVELEFT
+								siGame.characterMoveLeft();
 								draw_si_grid();
 								card5.revalidate();
 							} else if (e.getKeyChar() == 'd'
 									|| e.getKeyChar() == 'D') {
-								//siGame.MOVERIGHT
+								siGame.characterMoveRight();
 								draw_si_grid();
 								card5.revalidate();
 							} else if (e.getKeyChar() == 's'
@@ -599,24 +599,23 @@ public class Window {
 				card5.revalidate(); // Redraws graphics on card5
 				
 				// Actual loop for game
-//				final Timer timer = new Timer(TIMER, new ActionListener() {
-//					@Override
-//					public void actionPerformed(ActionEvent arg0) {
-//						if (!centGame.getPause()) {
-//							centGame.Move(centGame.getCurrentDir());
-//							draw_centipede_grid();
-//							card4.revalidate();
-//						}
-//						if (centGame.isOver()) {
-//							System.out.println("GAME OVER PRESS RESTART!");
-//							((Timer) arg0.getSource()).stop();
-//							System.out.println("Final score is: " + centGame.getScore());
-//						}
-//					}
-//				});
-//				timer.setRepeats(true);
-//				timer.setCoalesce(true);
-//				timer.start();
+				final Timer siTimer = new Timer(TIMER, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if (!siGame.getPause()) {
+							siGame.moveAliens();
+							draw_si_grid();
+							card5.revalidate();
+						}
+						if (siGame.isOver()) {
+							System.out.println("GAME OVER PRESS RESTART!");
+							((Timer) arg0.getSource()).stop();
+						}
+					}
+				});
+				siTimer.setRepeats(true);
+				siTimer.setCoalesce(true);
+				siTimer.start();
 				
 				// If restart button is pressed
 				siRestartButton.addActionListener(new ActionListener() {
@@ -626,9 +625,9 @@ public class Window {
 						siGame = new SpaceInvaders();
 						draw_si_grid();						
 						card5.revalidate(); // Redraws graphics on card5
-						//timer.setRepeats(true);
-						//timer.setCoalesce(true);
-						//timer.start();
+						siTimer.setRepeats(true);
+						siTimer.setCoalesce(true);
+						siTimer.start();
 						siGame.pause();
 						siFlag = true;
 						siPauseButton.setText("Start");
@@ -914,6 +913,7 @@ public class Window {
 			Component c = super.getTableCellRendererComponent(table, value,
 					isSelected, hasFocus, row, column);
 			c.setBackground(getColor((Object) value));
+			c.setForeground(getColor((Object) value));
 			return c;
 		}
 
