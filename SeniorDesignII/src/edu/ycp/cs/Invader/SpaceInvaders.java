@@ -72,6 +72,11 @@ public class SpaceInvaders
 		character.moveRight();
 	}
 	
+	public Character getCharacter()
+	{
+		return character;
+	}
+	
 	public void setBarriers()
 	{	
 		createBarrier(1, 4);
@@ -102,6 +107,15 @@ public class SpaceInvaders
 	
 	public void moveAliens()
 	{
+		Random random = new Random();
+		
+		if(random.nextInt(10) < 1)
+		{
+			createAlienLaser();
+		}
+		
+		moveLasers();
+		
 		if(move_Down)
 		{
 			for(Alien a : AlienList)
@@ -153,15 +167,6 @@ public class SpaceInvaders
 				is_Over = true;
 			}
 		}
-		
-		Random random = new Random();
-		
-		if(random.nextInt(10) < 1)
-		{
-			createAlienLaser();
-		}
-		
-		moveLasers();
 	}
 	
 	public void killBarriers()
@@ -243,6 +248,10 @@ public class SpaceInvaders
 				{
 					System.out.printf("C ");
 				}
+				else if(grid[j][i].getClass().equals(Laser.class))
+				{
+					System.out.printf("| ");
+				}
 				else
 				{
 					System.out.printf("0 ");
@@ -301,9 +310,9 @@ public class SpaceInvaders
 		while(laserIterator.hasNext())
 		{
 			Laser l = laserIterator.next();
-			int newx = l.getLocation().getX() + l.getDirection();
-			int newy = l.getLocation().getY();
-			if(newx < 0 || newx >= 25)
+			int newx = l.getLocation().getX();
+			int newy = l.getLocation().getY() + l.getDirection();
+			if(newx < 0 || newx >= 20 || newy < 0 || newy >= 25)
 			{
 				laserIterator.remove();
 			}
@@ -334,10 +343,17 @@ public class SpaceInvaders
 						if(!l.getFriendly())
 						{
 							b.damageBarrier();
-							laserIterator.remove();
 						}
 					}
+					
+					laserIterator.remove();
 				}
+			}
+			
+			else if(grid[newx][newy].getClass().equals(Laser.class))
+			{
+				Laser l2 = new Laser(((Laser) grid[newx][newy]).getFriendly(), new Coordinates(newx, newy));
+				LaserList.remove(l2);
 			}
 			
 			else if(grid[newx][newy].getClass().equals(edu.ycp.cs.Invader.Character.class))

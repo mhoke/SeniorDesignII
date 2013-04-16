@@ -42,7 +42,7 @@ public class Laser
 	
 	public void moveLaser()
 	{
-		location.setX(location.getX() + direction_offset);
+		location.setY(location.getY() + direction_offset);
 	}
 
 	@Override
