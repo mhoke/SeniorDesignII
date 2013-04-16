@@ -58,6 +58,11 @@ public class Alien
 		location.setY(location.getY() - 1);
 	}
 	
+	public void damageAlien()
+	{
+		Life --;
+	}
+	
 	public boolean charTest(Coordinates c)
 	{
 		if(location.getY() == 0 && location.getX() == c.getX())

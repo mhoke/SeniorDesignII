@@ -29,6 +29,16 @@ public class Laser
 	{
 		return direction_offset;
 	}
+	
+	public Coordinates getLocation()
+	{
+		return location;
+	}
+	
+	public boolean getFriendly()
+	{
+		return friendly;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

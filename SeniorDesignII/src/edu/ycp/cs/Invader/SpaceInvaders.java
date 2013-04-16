@@ -160,6 +160,8 @@ public class SpaceInvaders
 		{
 			createAlienLaser();
 		}
+		
+		moveLasers();
 	}
 	
 	public void killBarriers()
@@ -285,6 +287,61 @@ public class SpaceInvaders
 		if(!LaserList.contains(laser))
 		{
 			LaserList.add(laser);
+		}
+	}
+	
+	public void moveLasers()
+	{
+		ListIterator<Laser> laserIterator = LaserList.listIterator();
+		while(laserIterator.hasNext())
+		{
+			Laser l = laserIterator.next();
+			int newx = l.getLocation().getX() + l.getDirection();
+			int newy = l.getLocation().getY();
+			if(newx < 0 || newx >= 25)
+			{
+				laserIterator.remove();
+			}
+			else if(grid[newx][newy].getClass().equals(Alien.class))
+			{
+				ListIterator<Alien> alienIterator = AlienList.listIterator();
+				while(alienIterator.hasNext())
+				{
+					Alien a = alienIterator.next();
+					if(a.getX() == newx && a.getY() == newy)
+					{
+						if(l.getFriendly())
+						{
+							a.damageAlien();
+							laserIterator.remove();
+						}
+					}
+				}
+			}
+			else if(grid[newx][newy].getClass().equals(Barrier.class))
+			{
+				ListIterator<Barrier> barrierIterator = BarrierList.listIterator();
+				while(barrierIterator.hasNext())
+				{
+					Barrier b = barrierIterator.next();
+					if(b.getX() == newx && b.getY() == newy)
+					{
+						if(!l.getFriendly())
+						{
+							b.damageBarrier();
+							laserIterator.remove();
+						}
+					}
+				}
+			}
+			
+			else if(grid[newx][newy].getClass().equals(edu.ycp.cs.Invader.Character.class))
+			{
+				if(!l.getFriendly())
+				{
+					is_Over = true;
+				}
+			}
 		}
 	}
 	

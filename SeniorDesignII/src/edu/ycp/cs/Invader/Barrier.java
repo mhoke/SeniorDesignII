@@ -35,4 +35,9 @@ public class Barrier
 	{
 		Life = 0;
 	}
+	
+	public void damageBarrier()
+	{
+		Life --;
+	}
 }
