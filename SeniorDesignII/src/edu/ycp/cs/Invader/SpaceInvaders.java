@@ -156,7 +156,7 @@ public class SpaceInvaders
 		
 		Random random = new Random();
 		
-		if(random.nextInt(10) < 4)
+		if(random.nextInt(10) < 1)
 		{
 			createAlienLaser();
 		}
@@ -346,6 +346,10 @@ public class SpaceInvaders
 				{
 					is_Over = true;
 				}
+			}
+			else
+			{
+				l.moveLaser();
 			}
 		}
 	}

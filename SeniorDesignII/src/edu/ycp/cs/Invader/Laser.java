@@ -39,6 +39,11 @@ public class Laser
 	{
 		return friendly;
 	}
+	
+	public void moveLaser()
+	{
+		location.setX(location.getX() + direction_offset);
+	}
 
 	@Override
 	public boolean equals(Object obj) {
