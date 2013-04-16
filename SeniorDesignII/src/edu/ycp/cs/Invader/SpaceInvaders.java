@@ -6,6 +6,9 @@ import java.util.Random;
 
 public class SpaceInvaders 
 {
+	int NUM_ROWS = 25;
+	int NUM_COLS = 20;
+	
 	boolean move_Left;
 //	Coordinates top_left;
 //	Coordinates bottom_right;
@@ -20,6 +23,7 @@ public class SpaceInvaders
 	
 	boolean move_Down;
 	boolean is_Over;
+	boolean pause;
 	
 	public SpaceInvaders()
 	{
@@ -30,6 +34,7 @@ public class SpaceInvaders
 		grid = new Object[20][25];
 		move_Down = false;
 		is_Over = false;
+		pause = false;
 		
 		AlienList = new LinkedList<Alien>();
 		BarrierList = new LinkedList<Barrier>();
@@ -41,6 +46,30 @@ public class SpaceInvaders
 		character = new Character(7, 0);
 		
 		renderGrid();
+	}
+	
+	public boolean getPause() {
+		return pause;
+	}
+	
+	public void pause() {
+		pause = !pause;
+	}
+	
+	public int getNumRows() {
+		return NUM_ROWS;
+	}
+	
+	public int getNumCols() {
+		return NUM_COLS;
+	}
+	
+	public void characterMoveLeft() {
+		character.moveLeft();
+	}
+	
+	public void characterMoveRight() {
+		character.moveRight();
 	}
 	
 	public void setBarriers()
