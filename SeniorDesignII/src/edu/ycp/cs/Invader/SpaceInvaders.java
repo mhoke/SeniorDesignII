@@ -216,6 +216,11 @@ public class SpaceInvaders
 			grid[b.getX()][b.getY()] = b;
 		}
 		
+		for(Laser l : LaserList)
+		{
+			grid[l.getLocation().getX()][l.getLocation().getY()] = l;
+		}
+		
 		grid[character.getLocation().getX()][character.getLocation().getY()] = character;
 	}
 	
