@@ -4,6 +4,12 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
 
+//*************
+//Things that ideally need fixed/talked about
+//	Should lasers cancel each other out
+//	Should enemy and friendly lasers show up differently on the board
+//	Should the key input for firing a laser be different - should they be required to press and release?
+
 public class SpaceInvaders 
 {
 	int NUM_ROWS = 25;
@@ -116,6 +122,8 @@ public class SpaceInvaders
 		
 		moveLasers();
 		
+		renderGrid();
+		
 		if(move_Down)
 		{
 			for(Alien a : AlienList)
@@ -223,7 +231,25 @@ public class SpaceInvaders
 		
 		for(Laser l : LaserList)
 		{
-			grid[l.getLocation().getX()][l.getLocation().getY()] = l;
+			if(grid[l.getLocation().getX()][l.getLocation().getY()].getClass().equals(Alien.class) && l.getFriendly() && !l.getRemove())
+			{
+				AlienList.remove(((Alien) grid[l.getLocation().getX()][l.getLocation().getY()]));
+				l.removeLaser();
+				grid[l.getLocation().getX()][l.getLocation().getY()] = 0;
+			}
+			else
+			{
+				grid[l.getLocation().getX()][l.getLocation().getY()] = l;
+			}
+		}
+		
+		ListIterator<Laser> laserIterator = LaserList.listIterator();
+		while(laserIterator.hasNext())
+		{
+			if(laserIterator.next().getRemove())
+			{
+				laserIterator.remove();
+			}
 		}
 		
 		grid[character.getLocation().getX()][character.getLocation().getY()] = character;
@@ -306,15 +332,13 @@ public class SpaceInvaders
 	
 	public void moveLasers()
 	{
-		ListIterator<Laser> laserIterator = LaserList.listIterator();
-		while(laserIterator.hasNext())
+		for(Laser l : LaserList)
 		{
-			Laser l = laserIterator.next();
 			int newx = l.getLocation().getX();
 			int newy = l.getLocation().getY() + l.getDirection();
 			if(newx < 0 || newx >= 20 || newy < 0 || newy >= 25)
 			{
-				laserIterator.remove();
+				l.removeLaser();
 			}
 			else if(grid[newx][newy].getClass().equals(Alien.class))
 			{
@@ -327,7 +351,7 @@ public class SpaceInvaders
 						if(l.getFriendly())
 						{
 							a.damageAlien();
-							laserIterator.remove();
+							l.removeLaser();
 						}
 					}
 				}
@@ -344,16 +368,9 @@ public class SpaceInvaders
 						{
 							b.damageBarrier();
 						}
+						l.removeLaser();
 					}
-					
-					laserIterator.remove();
 				}
-			}
-			
-			else if(grid[newx][newy].getClass().equals(Laser.class))
-			{
-				Laser l2 = new Laser(((Laser) grid[newx][newy]).getFriendly(), new Coordinates(newx, newy));
-				LaserList.remove(l2);
 			}
 			
 			else if(grid[newx][newy].getClass().equals(edu.ycp.cs.Invader.Character.class))

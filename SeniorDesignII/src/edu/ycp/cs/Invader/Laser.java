@@ -5,6 +5,7 @@ public class Laser
 	boolean friendly;
 	int direction_offset;
 	Coordinates location;
+	boolean remove;
 	
 	public Laser(boolean friendly, Coordinates location)
 	{
@@ -18,6 +19,7 @@ public class Laser
 		{
 			direction_offset = -1;
 		}
+		remove = false;
 	}
 	
 	public boolean isFriendly()
@@ -43,6 +45,16 @@ public class Laser
 	public void moveLaser()
 	{
 		location.setY(location.getY() + direction_offset);
+	}
+	
+	public void removeLaser()
+	{
+		remove = true;
+	}
+	
+	public boolean getRemove()
+	{
+		return remove;
 	}
 
 	@Override

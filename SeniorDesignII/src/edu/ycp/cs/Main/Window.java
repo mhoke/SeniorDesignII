@@ -26,6 +26,7 @@ import javax.swing.table.TableCellRenderer;
 import edu.ycp.cs.Centipede.Centipede;
 import edu.ycp.cs.Invader.Alien;
 import edu.ycp.cs.Invader.Barrier;
+import edu.ycp.cs.Invader.Laser;
 import edu.ycp.cs.Invader.SpaceInvaders;
 import edu.ycp.cs.Tetris.Tetris;
 
@@ -575,9 +576,9 @@ public class Window {
 								siGame.characterMoveRight();
 								draw_si_grid();
 								card5.revalidate();
-							} else if (e.getKeyChar() == 's'
-									|| e.getKeyChar() == 'S') {
-								//siGame.SHOOTLASER
+							} else if (e.getKeyChar() == 'w'
+									|| e.getKeyChar() == 'W') {
+								siGame.createUserLaser();
 								draw_si_grid();
 								card5.revalidate();
 							}
@@ -927,6 +928,9 @@ public class Window {
 			}
 			else if (value.getClass().equals(edu.ycp.cs.Invader.Character.class)) {
 				return Color.GREEN;
+			}
+			else if (value.getClass().equals(Laser.class)) {
+				return Color.WHITE;
 			}
 			else {
 				return Color.DARK_GRAY;
