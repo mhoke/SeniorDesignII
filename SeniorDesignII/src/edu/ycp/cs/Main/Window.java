@@ -929,9 +929,17 @@ public class Window {
 			else if (value.getClass().equals(edu.ycp.cs.Invader.Character.class)) {
 				return Color.GREEN;
 			}
+//			else if (value.getClass().equals(Laser.class)) {
+//				return Color.WHITE;
+//			}
 			else if (value.getClass().equals(Laser.class)) {
-				return Color.WHITE;
-			}
+				if (((Laser) value).isFriendly()) {
+					return Color.WHITE;
+				}
+				else {
+					return Color.YELLOW;
+				}
+			}				
 			else {
 				return Color.DARK_GRAY;
 			}

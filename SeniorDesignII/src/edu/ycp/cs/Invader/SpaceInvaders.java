@@ -9,6 +9,8 @@ import java.util.Random;
 //	Should lasers cancel each other out
 //	Should enemy and friendly lasers show up differently on the board
 //	Should the key input for firing a laser be different - should they be required to press and release?
+//  Aliens move off to the left dont hit user
+//  Win Game?!?!
 
 public class SpaceInvaders 
 {
