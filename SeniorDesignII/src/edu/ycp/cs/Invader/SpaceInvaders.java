@@ -9,8 +9,8 @@ import java.util.Random;
 //	Should lasers cancel each other out
 //	Should enemy and friendly lasers show up differently on the board
 //	Should the key input for firing a laser be different - should they be required to press and release?
-//  Aliens move off to the left dont hit user
-//  Win Game?!?!
+//  Aliens move off to the left dont hit user - done
+//  Win Game?!?! - done, although it doesn't specify if the game is won or lost. this could be checked by scores or if alienlist is empty
 
 public class SpaceInvaders 
 {
@@ -115,66 +115,85 @@ public class SpaceInvaders
 	
 	public void moveAliens()
 	{
-		Random random = new Random();
-		
-		if(random.nextInt(10) < 1)
+		if(AlienList.isEmpty())
 		{
-			createAlienLaser();
+			is_Over = true;
 		}
 		
-		moveLasers();
-		
-		renderGrid();
-		
-		if(move_Down)
-		{
-			for(Alien a : AlienList)
-			{
-				a.moveDown();
-			}
-			move_Down = false;
-		}
 		else
 		{
-			if(move_Left)
+		
+			Random random = new Random();
+			
+			if(random.nextInt(10) < 1)
+			{
+				createAlienLaser();
+			}
+			
+			removeLasers();
+			
+			moveLasers();
+			
+			renderGrid();
+			
+			if(move_Down)
 			{
 				for(Alien a : AlienList)
 				{
-					if(a.moveLeft())
+					a.moveDown();
+					if(a.getY() < 0)
 					{
-						if(!move_Down)
-						{
-							move_Left = false;
-							move_Down = true;
-						}
-					}				
+						is_Over = true;
+						break;
+					}
 				}
+				move_Down = false;
 			}
 			else
 			{
-				for(Alien a : AlienList)
+				if(move_Left)
 				{
-					if(a.moveRight())
+					for(Alien a : AlienList)
 					{
-						if(!move_Down)
+						if(a.moveLeft())
 						{
-							move_Left = true;
-							move_Down = true;
+							if(!move_Down)
+							{
+								move_Left = false;
+								move_Down = true;
+							}
+						}				
+					}
+				}
+				else
+				{
+					for(Alien a : AlienList)
+					{
+						if(a.moveRight())
+						{
+							if(!move_Down)
+							{
+								move_Left = true;
+								move_Down = true;
+							}
 						}
 					}
 				}
 			}
-		}
-		
-		killBarriers();
-		
-		renderGrid();
-		
-		for(Alien a : AlienList)
-		{
-			if(a.charTest(character.getLocation()))
+			
+			if(!is_Over)
 			{
-				is_Over = true;
+				killBarriers();
+				
+				renderGrid();
+				
+				for(Alien a : AlienList)
+				{
+					if(a.charTest(character.getLocation()))
+					{
+						is_Over = true;
+					}
+				}
 			}
 		}
 	}
@@ -385,6 +404,56 @@ public class SpaceInvaders
 			else
 			{
 				l.moveLaser();
+			}
+		}
+	}
+	
+	public void removeLasers()
+	{
+		int index = 1;
+		ListIterator<Laser> l = LaserList.listIterator();
+		while(l.hasNext())
+		{
+			Laser laser = l.next();
+			ListIterator<Laser> l2 = LaserList.listIterator(index);
+			
+			while(l2.hasNext())
+			{
+				Laser laser2 = l2.next();
+				if(laser.getLocation().getY() == laser2.getLocation().getY())
+				{
+					laser.removeLaser();
+					laser2.removeLaser();
+				}
+				
+				else if(laser.getFriendly())
+				{
+					if(!laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() - 1)
+					{
+						laser.removeLaser();
+						laser2.removeLaser();
+					}
+				}
+				else
+				{
+					if(laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() + 1)
+					{
+						laser.removeLaser();
+						laser2.removeLaser();
+					}
+				}
+			}
+			
+			index ++;
+		}
+		
+		ListIterator<Laser> l3 = LaserList.listIterator();
+		while(l3.hasNext())
+		{
+			Laser laser3 = l3.next();
+			if(laser3.getRemove())
+			{
+				l3.remove();
 			}
 		}
 	}
