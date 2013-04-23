@@ -420,7 +420,7 @@ public class SpaceInvaders
 			while(l2.hasNext())
 			{
 				Laser laser2 = l2.next();
-				if(laser.getLocation().getY() == laser2.getLocation().getY())
+				if(laser.getLocation().equals(laser2.getLocation()))
 				{
 					laser.removeLaser();
 					laser2.removeLaser();
