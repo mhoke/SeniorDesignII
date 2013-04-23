@@ -420,24 +420,27 @@ public class SpaceInvaders
 			while(l2.hasNext())
 			{
 				Laser laser2 = l2.next();
-				if(laser.getLocation().equals(laser2.getLocation()))
+				if(laser.getLocation().equals(laser2.getLocation()) && laser.getFriendly() != laser2.getFriendly())
 				{
+					System.out.println("Remove 1");
 					laser.removeLaser();
 					laser2.removeLaser();
 				}
 				
 				else if(laser.getFriendly())
 				{
-					if(!laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() - 1)
+					if(!laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() - 1 && laser.getLocation().getX() == laser2.getLocation().getX())
 					{
+						System.out.println("Remove 2");
 						laser.removeLaser();
 						laser2.removeLaser();
 					}
 				}
 				else
 				{
-					if(laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() + 1)
+					if(laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() + 1 && laser.getLocation().getX() == laser2.getLocation().getX())
 					{
+						System.out.println("Remove 3");
 						laser.removeLaser();
 						laser2.removeLaser();
 					}
