@@ -203,9 +203,9 @@ public class Window {
 				gbc2.gridx++;
 
 				// Add buttons
-				Container tetrisButtonContainer = new Container();
+				final Container tetrisButtonContainer = new Container();
 				tetrisButtonContainer.setLayout(new GridBagLayout());
-				GridBagConstraints gbc4 = new GridBagConstraints();
+				final GridBagConstraints gbc4 = new GridBagConstraints();
 				gbc4.gridx = 0;
 				gbc4.gridy = 0;
 				gbc4.insets = new Insets(2, 2, 2, 2);
@@ -217,6 +217,7 @@ public class Window {
 				gbc4.gridy++;
 				JButton mainMenuButton = new JButton("Main Menu");
 				tetrisButtonContainer.add(mainMenuButton, gbc4);
+				gbc4.gridy++;
 
 				card3.add(tetrisButtonContainer, gbc2);
 				card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
@@ -280,6 +281,7 @@ public class Window {
 				};
 				card3.addKeyListener(tkl);
 
+				card3.requestFocusInWindow();
 				draw_tetris_grid();
 				card3.revalidate(); // Redraws graphics on card3
 
@@ -293,10 +295,24 @@ public class Window {
 							draw_next_piece_grid();
 							card3.revalidate(); // Redraws graphics on card3
 						}
-						if (tetrisGame.isOver()) {
-							System.out.println("GAME OVER PRESS RESTART!");
+						if (tetrisGame.isOver()) { // Print final score
 							((Timer) arg0.getSource()).stop();
-							System.out.println("Final score is: " + tetrisGame.getScore());
+							Container gameOverContainer = new Container();
+							gameOverContainer.setLayout(new GridBagLayout());
+							GridBagConstraints gbc9 = new GridBagConstraints();
+							gbc9.gridx = 0;
+							gbc9.gridy = 0;
+							gbc9.insets = new Insets(2, 2, 2, 2);
+							JLabel gameOver = new JLabel("GAME OVER!");
+							JLabel tetrisScore = new JLabel("Final score is: " + tetrisGame.getScore());
+							JLabel pressRestart = new JLabel("Press restart!");
+							gameOverContainer.add(gameOver, gbc9);
+							gbc9.gridy++;
+							gameOverContainer.add(tetrisScore, gbc9);
+							gbc9.gridy++;
+							gameOverContainer.add(pressRestart, gbc9);
+							tetrisButtonContainer.add(gameOverContainer, gbc4);
+							card3.requestFocusInWindow();
 						}
 					}
 				});
@@ -309,6 +325,9 @@ public class Window {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						if(tetrisGame.isOver()) { // Remove final score stuff
+							tetrisButtonContainer.remove(tetrisButtonContainer.getComponentCount() - 1);
+						}
 						tetrisGame = new Tetris();
 						draw_tetris_grid();
 						draw_next_piece_grid();
@@ -318,7 +337,7 @@ public class Window {
 						tetrisTimer.start();
 						tetrisGame.pause();
 						tetrisFlag = true;
-						tetrisPauseButton.setText("Start");						
+						tetrisPauseButton.setText("Start");
 					}
 				});
 				
@@ -370,9 +389,9 @@ public class Window {
 				card4.add(centTable, gbc5);
 				gbc5.gridx++;
 				
-				Container centButtonContainer = new Container();
+				final Container centButtonContainer = new Container();
 				centButtonContainer.setLayout(new GridBagLayout());
-				GridBagConstraints gbc6 = new GridBagConstraints();
+				final GridBagConstraints gbc6 = new GridBagConstraints();
 				gbc6.gridx = 0;
 				gbc6.gridy = 0;
 				gbc6.insets = new Insets(2, 2, 2, 2);
@@ -384,6 +403,7 @@ public class Window {
 				gbc6.gridy++;
 				JButton centMainMenuButton = new JButton("Main Menu");
 				centButtonContainer.add(centMainMenuButton, gbc6);
+				gbc6.gridy++;
 				card4.add(centButtonContainer, gbc5);
 				card4.requestFocusInWindow();
 				
@@ -453,10 +473,24 @@ public class Window {
 							draw_centipede_grid();
 							card4.revalidate();
 						}
-						if (centGame.isOver()) {
-							System.out.println("GAME OVER PRESS RESTART!");
+						if (centGame.isOver()) { // Print final score
 							((Timer) arg0.getSource()).stop();
-							System.out.println("Final score is: " + centGame.getScore());
+							Container gameOverContainer = new Container();
+							gameOverContainer.setLayout(new GridBagLayout());
+							GridBagConstraints gbc10 = new GridBagConstraints();
+							gbc10.gridx = 0;
+							gbc10.gridy = 0;
+							gbc10.insets = new Insets(2, 2, 2, 2);
+							JLabel gameOver = new JLabel("GAME OVER!");
+							JLabel tetrisScore = new JLabel("Final score is: " + centGame.getScore());
+							JLabel pressRestart = new JLabel("Press restart!");
+							gameOverContainer.add(gameOver, gbc10);
+							gbc10.gridy++;
+							gameOverContainer.add(tetrisScore, gbc10);
+							gbc10.gridy++;
+							gameOverContainer.add(pressRestart, gbc10);
+							centButtonContainer.add(gameOverContainer, gbc6);
+							card4.requestFocusInWindow();
 						}
 					}
 				});
@@ -469,6 +503,9 @@ public class Window {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						if(centGame.isOver()) { // Remove final score stuff
+							centButtonContainer.remove(centButtonContainer.getComponentCount() - 1);
+						}
 						centGame = new Centipede();
 						centGame.Move('l');
 						draw_centipede_grid();						
@@ -530,9 +567,9 @@ public class Window {
 				card5.add(siTable, gbc7);
 				gbc7.gridx++;
 								
-				Container siButtonContainer = new Container();
+				final Container siButtonContainer = new Container();
 				siButtonContainer.setLayout(new GridBagLayout());
-				GridBagConstraints gbc8 = new GridBagConstraints();
+				final GridBagConstraints gbc8 = new GridBagConstraints();
 				gbc8.gridx = 0;
 				gbc8.gridy = 0;
 				gbc8.insets = new Insets(2, 2, 2, 2);
@@ -544,6 +581,7 @@ public class Window {
 				gbc8.gridy++;
 				JButton siMainMenuButton = new JButton("Main Menu");
 				siButtonContainer.add(siMainMenuButton, gbc8);
+				gbc8.gridy++;
 				card5.add(siButtonContainer, gbc7);
 				card5.requestFocusInWindow();
 				
@@ -609,8 +647,23 @@ public class Window {
 							card5.revalidate();
 						}
 						if (siGame.isOver()) {
-							System.out.println("GAME OVER PRESS RESTART!");
 							((Timer) arg0.getSource()).stop();
+							Container gameOverContainer = new Container();
+							gameOverContainer.setLayout(new GridBagLayout());
+							GridBagConstraints gbc11 = new GridBagConstraints();
+							gbc11.gridx = 0;
+							gbc11.gridy = 0;
+							gbc11.insets = new Insets(2, 2, 2, 2);
+							JLabel gameOver = new JLabel("GAME OVER!");
+							//JLabel tetrisScore = new JLabel("Final score is: " + siGame.getScore());
+							JLabel pressRestart = new JLabel("Press restart!");
+							gameOverContainer.add(gameOver, gbc11);
+							gbc11.gridy++;
+							//gameOverContainer.add(tetrisScore, gbc10);
+							//gbc10.gridy++;
+							gameOverContainer.add(pressRestart, gbc11);
+							siButtonContainer.add(gameOverContainer, gbc8);
+							card5.requestFocusInWindow();
 						}
 					}
 				});
@@ -623,6 +676,9 @@ public class Window {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						card5.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						if(siGame.isOver()) { // Remove final score stuff
+							siButtonContainer.remove(siButtonContainer.getComponentCount() - 1);
+						}
 						siGame = new SpaceInvaders();
 						draw_si_grid();						
 						card5.revalidate(); // Redraws graphics on card5
