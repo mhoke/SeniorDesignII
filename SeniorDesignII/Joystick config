@@ -1,0 +1,9 @@
+Joystick:	Up:	r
+		Down:	f
+		Left:	d
+		Right:	g
+
+Buttons:	Red-L:	q
+		Red-R: 	w
+		Blue-L:	a
+		Blue-R:	s
