@@ -61,6 +61,7 @@ public class Window {
 	private boolean tetrisFlag = false;
 	private boolean centFlag = false;
 	private boolean siFlag = false;
+	private boolean ArcadeControls = true;
 
 	public void addComponentToWindow(final Container pane) {
 		// Create the "cards"
@@ -69,6 +70,10 @@ public class Window {
 		final JPanel card3 = new JPanel();
 		final JPanel card4 = new JPanel();
 		final JPanel card5 = new JPanel();
+		
+		tetrisGame.pause();
+		centGame.pause();
+		siGame.pause();
 
 		// Button for SplashScreen
 		JButton continueButton = new JButton("CONTINUE TO MAIN MENU");
@@ -243,39 +248,86 @@ public class Window {
 					@Override
 					public void keyPressed(KeyEvent e) {
 						if (!tetrisGame.getPause() && !tetrisGame.isOver()) {
-							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-								tetrisGame.move_Left();
-								draw_tetris_grid();
-								card3.revalidate();
-							} else if (e.getKeyChar() == 'd'
-									|| e.getKeyChar() == 'D') {
-								tetrisGame.move_Right();
-								draw_tetris_grid();
-								card3.revalidate();
-							} else if (e.getKeyChar() == 'q'
-									|| e.getKeyChar() == 'Q') {
-								tetrisGame.rotate_left();
-								draw_tetris_grid();
-								card3.revalidate();
-							} else if (e.getKeyChar() == 'e'
-									|| e.getKeyChar() == 'E') {
-								tetrisGame.rotate_right();
-								draw_tetris_grid();
-								card3.revalidate();
-							} else if (e.getKeyChar() == 's'
-									|| e.getKeyChar() == 'S') {
-								tetrisGame.drop_Piece();
-								draw_tetris_grid();
-								card3.revalidate();
+							if(!ArcadeControls)
+							{
+								if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+									tetrisGame.move_Left();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 'd'
+										|| e.getKeyChar() == 'D') {
+									tetrisGame.move_Right();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 'q'
+										|| e.getKeyChar() == 'Q') {
+									tetrisGame.rotate_left();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 'e'
+										|| e.getKeyChar() == 'E') {
+									tetrisGame.rotate_right();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 's'
+										|| e.getKeyChar() == 'S') {
+									tetrisGame.drop_Piece();
+									draw_tetris_grid();
+									card3.revalidate();
+								}
+							}
+							else
+							{
+								if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D') {
+									tetrisGame.move_Left();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 'g'
+										|| e.getKeyChar() == 'G') {
+									tetrisGame.move_Right();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 'a'
+										|| e.getKeyChar() == 'A') {
+									tetrisGame.rotate_left();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 's'
+										|| e.getKeyChar() == 'S') {
+									tetrisGame.rotate_right();
+									draw_tetris_grid();
+									card3.revalidate();
+								} else if (e.getKeyChar() == 'f'
+										|| e.getKeyChar() == 'F') {
+									tetrisGame.drop_Piece();
+									draw_tetris_grid();
+									card3.revalidate();
+								}
 							}
 						}
-						if (e.getKeyChar() == ' ') {
-							if (tetrisFlag) {
-								tetrisPauseButton.setText("Pause");
-								tetrisFlag = false;
+						if(!ArcadeControls)
+						{
+							if (e.getKeyChar() == ' ') {
+								if (tetrisFlag) {
+									tetrisPauseButton.setText("Pause");
+									tetrisFlag = false;
+								}
+								tetrisGame.pause();
+								card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 							}
-							tetrisGame.pause();
-							card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						}
+						else
+						{
+							if(e.getKeyChar() == 'q' || e.getKeyChar() == 'Q')
+							{
+								if(tetrisFlag)
+								{
+									tetrisPauseButton.setText("Pause");
+									tetrisFlag = false;
+								}
+								tetrisGame.pause();
+								card3.requestFocusInWindow();
+							}
 						}
 					}
 				};
@@ -313,6 +365,12 @@ public class Window {
 							gameOverContainer.add(pressRestart, gbc9);
 							tetrisButtonContainer.add(gameOverContainer, gbc4);
 							card3.requestFocusInWindow();
+							
+							Score score = new Score();
+							score.getScores("Tetris");
+							score.createRandomName();
+							score.setCurrent_Score(tetrisGame.getScore());
+							score.checkScore();
 						}
 					}
 				});
@@ -346,6 +404,7 @@ public class Window {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						tetrisFlag = true;
+						tetrisGame.pause();
 						cards.remove(card3);
 						CardLayout cl = (CardLayout) (cards.getLayout());
 						cl.show(cards, MAINMENU);				
@@ -427,34 +486,76 @@ public class Window {
 					@Override
 					public void keyPressed(KeyEvent e) {
 						if (!centGame.getPause() && !centGame.isOver()) {
-							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-								centGame.Move('l');
-								draw_centipede_grid();
-								card4.revalidate();
-							} else if (e.getKeyChar() == 'd'
-									|| e.getKeyChar() == 'D') {
-								centGame.Move('r');
-								draw_centipede_grid();
-								card4.revalidate();
-							} else if (e.getKeyChar() == 'w'
-									|| e.getKeyChar() == 'W') {
-								centGame.Move('u');
-								draw_centipede_grid();
-								card4.revalidate();
-							} else if (e.getKeyChar() == 's'
-									|| e.getKeyChar() == 'S') {
-								centGame.Move('d');
-								draw_centipede_grid();
-								card4.revalidate();
+							if(!ArcadeControls)
+							{
+								if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+									centGame.Move('l');
+									draw_centipede_grid();
+									card4.revalidate();
+								} else if (e.getKeyChar() == 'd'
+										|| e.getKeyChar() == 'D') {
+									centGame.Move('r');
+									draw_centipede_grid();
+									card4.revalidate();
+								} else if (e.getKeyChar() == 'w'
+										|| e.getKeyChar() == 'W') {
+									centGame.Move('u');
+									draw_centipede_grid();
+									card4.revalidate();
+								} else if (e.getKeyChar() == 's'
+										|| e.getKeyChar() == 'S') {
+									centGame.Move('d');
+									draw_centipede_grid();
+									card4.revalidate();
+								}
+							}
+							else
+							{
+								if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D') {
+									centGame.Move('l');
+									draw_centipede_grid();
+									card4.revalidate();
+								} else if (e.getKeyChar() == 'g'
+										|| e.getKeyChar() == 'G') {
+									centGame.Move('r');
+									draw_centipede_grid();
+									card4.revalidate();
+								} else if (e.getKeyChar() == 'r'
+										|| e.getKeyChar() == 'R') {
+									centGame.Move('u');
+									draw_centipede_grid();
+									card4.revalidate();
+								} else if (e.getKeyChar() == 'f'
+										|| e.getKeyChar() == 'F') {
+									centGame.Move('d');
+									draw_centipede_grid();
+									card4.revalidate();
+								}
 							}
 						}
-						if (e.getKeyChar() == ' ') {
-							if (centFlag) {
-								centPauseButton.setText("Pause");
-								centFlag = false;
+						if(!ArcadeControls)
+						{
+							if (e.getKeyChar() == ' ') {
+								if (centFlag) {
+									centPauseButton.setText("Pause");
+									centFlag = false;
+								}
+								centGame.pause();
+								card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 							}
-							centGame.pause();
-							card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						}
+						else
+						{
+							if(e.getKeyChar() == 'q' || e.getKeyChar() == 'Q')
+							{
+								if(centFlag)
+								{
+									centPauseButton.setText("Pause");
+									centFlag = false;
+								}
+								centGame.pause();
+								card4.requestFocusInWindow();
+							}
 						}
 					}
 				};
@@ -491,6 +592,12 @@ public class Window {
 							gameOverContainer.add(pressRestart, gbc10);
 							centButtonContainer.add(gameOverContainer, gbc6);
 							card4.requestFocusInWindow();
+							
+							Score score = new Score();
+							score.getScores("Centipede");
+							score.createRandomName();
+							score.setCurrent_Score(centGame.getScore());
+							score.checkScore();
 						}
 					}
 				});
@@ -525,6 +632,7 @@ public class Window {
 					public void actionPerformed(ActionEvent e) {
 						cards.remove(card4);
 						centFlag = true;
+						centGame.pause();
 						CardLayout cl = (CardLayout) (cards.getLayout());
 						cl.show(cards, MAINMENU);				
 					}
@@ -605,29 +713,66 @@ public class Window {
 					@Override
 					public void keyPressed(KeyEvent e) {
 						if (!siGame.getPause() && !siGame.isOver()) {
-							if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
-								siGame.characterMoveLeft();
-								draw_si_grid();
-								card5.revalidate();
-							} else if (e.getKeyChar() == 'd'
-									|| e.getKeyChar() == 'D') {
-								siGame.characterMoveRight();
-								draw_si_grid();
-								card5.revalidate();
-							} else if (e.getKeyChar() == 'w'
-									|| e.getKeyChar() == 'W') {
-								siGame.createUserLaser();
-								draw_si_grid();
-								card5.revalidate();
+							if(!ArcadeControls)
+							{
+								if (e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+									siGame.characterMoveLeft();
+									draw_si_grid();
+									card5.revalidate();
+								} else if (e.getKeyChar() == 'd'
+										|| e.getKeyChar() == 'D') {
+									siGame.characterMoveRight();
+									draw_si_grid();
+									card5.revalidate();
+								} else if (e.getKeyChar() == 'w'
+										|| e.getKeyChar() == 'W') {
+									siGame.createUserLaser();
+									draw_si_grid();
+									card5.revalidate();
+								}
+							}
+							else
+							{
+								if (e.getKeyChar() == 'd' || e.getKeyChar() == 'D') {
+									siGame.characterMoveLeft();
+									draw_si_grid();
+									card5.revalidate();
+								} else if (e.getKeyChar() == 'g'
+										|| e.getKeyChar() == 'G') {
+									siGame.characterMoveRight();
+									draw_si_grid();
+									card5.revalidate();
+								} else if (e.getKeyChar() == 'r'
+										|| e.getKeyChar() == 'R' || e.getKeyChar() == 'a' || e.getKeyChar() == 'A') {
+									siGame.createUserLaser();
+									draw_si_grid();
+									card5.revalidate();
+								}
 							}
 						}
-						if (e.getKeyChar() == ' ') {
-							if (siFlag) {
-								siPauseButton.setText("Pause");
-								siFlag = false;
+						if(!ArcadeControls)
+						{
+							if (e.getKeyChar() == ' ') {
+								if (siFlag) {
+									siPauseButton.setText("Pause");
+									siFlag = false;
+								}
+								siGame.pause();
+								card5.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
 							}
-							siGame.pause();
-							card5.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+						}
+						else
+						{
+							if(e.getKeyChar() == 'q' || e.getKeyChar() == 'Q')
+							{
+								if(siFlag)
+								{
+									siPauseButton.setText("Pause");
+									siFlag = false;
+								}
+								siGame.pause();
+								card5.requestFocusInWindow();
+							}
 						}
 					}
 				};
@@ -648,22 +793,44 @@ public class Window {
 						}
 						if (siGame.isOver()) {
 							((Timer) arg0.getSource()).stop();
-							Container gameOverContainer = new Container();
-							gameOverContainer.setLayout(new GridBagLayout());
-							GridBagConstraints gbc11 = new GridBagConstraints();
-							gbc11.gridx = 0;
-							gbc11.gridy = 0;
-							gbc11.insets = new Insets(2, 2, 2, 2);
-							JLabel gameOver = new JLabel("GAME OVER!");
-							//JLabel tetrisScore = new JLabel("Final score is: " + siGame.getScore());
-							JLabel pressRestart = new JLabel("Press restart!");
-							gameOverContainer.add(gameOver, gbc11);
-							gbc11.gridy++;
-							//gameOverContainer.add(tetrisScore, gbc10);
-							//gbc10.gridy++;
-							gameOverContainer.add(pressRestart, gbc11);
-							siButtonContainer.add(gameOverContainer, gbc8);
-							card5.requestFocusInWindow();
+							if(!siGame.shouldRestart())
+							{
+								Container gameOverContainer = new Container();
+								gameOverContainer.setLayout(new GridBagLayout());
+								GridBagConstraints gbc11 = new GridBagConstraints();
+								gbc11.gridx = 0;
+								gbc11.gridy = 0;
+								gbc11.insets = new Insets(2, 2, 2, 2);
+								JLabel gameOver = new JLabel("GAME OVER!");
+								JLabel tetrisScore = new JLabel("Final score is: " + siGame.getScore());
+								JLabel pressRestart = new JLabel("Press restart!");
+								gameOverContainer.add(gameOver, gbc11);
+								gbc11.gridy++;
+								gameOverContainer.add(tetrisScore, gbc11);
+								gbc11.gridy++;
+								gameOverContainer.add(pressRestart, gbc11);
+								siButtonContainer.add(gameOverContainer, gbc8);
+								card5.requestFocusInWindow();
+								
+								Score score = new Score();
+								score.getScores("Space Invaders");
+								score.createRandomName();
+								score.setCurrent_Score(siGame.getScore());
+								score.checkScore();
+							}
+							else
+							{
+								//TODO: Doesn't actually move from here - why??
+								siGame.StartNewGame();
+								draw_si_grid();						
+								card5.revalidate(); // Redraws graphics on card5
+//								siTimer.setRepeats(true);
+//								siTimer.setCoalesce(true);
+//								siTimer.start();
+								siGame.pause();
+								siFlag = true;
+								siPauseButton.setText("Start");
+							}
 						}
 					}
 				});
@@ -697,6 +864,7 @@ public class Window {
 					public void actionPerformed(ActionEvent e) {
 						cards.remove(card5);
 						siFlag = true;
+						siGame.pause();
 						CardLayout cl = (CardLayout) (cards.getLayout());
 						cl.show(cards, MAINMENU);				
 					}
@@ -791,7 +959,7 @@ public class Window {
 			case 5:
 				return Color.CYAN;
 			case 6:
-				return Color.BLACK;
+				return Color.ORANGE;
 			case 7:
 				return Color.MAGENTA;
 			case 8:
@@ -807,7 +975,7 @@ public class Window {
 				case 5:
 					return Color.CYAN;
 				case 6:
-					return Color.BLACK;
+					return Color.ORANGE;
 				case 7:
 					return Color.MAGENTA;
 				}
@@ -872,7 +1040,7 @@ public class Window {
 				case 5:
 					return Color.CYAN;
 				case 6:
-					return Color.BLACK;
+					return Color.ORANGE;
 				case 7:
 					return Color.MAGENTA;
 				}
@@ -977,7 +1145,7 @@ public class Window {
 		private Color getColor(Object value) {
 			// get grid object (alien, barrier, or character) and use certain color for each
 			if (value.getClass().equals(Barrier.class)) {
-				return Color.BLACK;
+				return Color.ORANGE;
 			}
 			else if (value.getClass().equals(Alien.class)) {
 				return Color.CYAN;

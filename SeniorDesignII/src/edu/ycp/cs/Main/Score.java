@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 public class Score 
 {
@@ -205,5 +206,28 @@ public class Score
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void createRandomName()
+	{
+		char[] c_array = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+		Random random = new Random();
+		char val1 = c_array[random.nextInt(26)];
+		char val2 = c_array[random.nextInt(26)];
+		char val3 = c_array[random.nextInt(26)];
+		
+		char[] result_array = new char[3];
+		
+		result_array[0] = val1;
+		result_array[1] = val2;
+		result_array[2] = val3;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(val1);
+		sb.append(val2);
+		sb.append(val3);
+		
+		setCurrentName(sb.toString());
 	}
 }

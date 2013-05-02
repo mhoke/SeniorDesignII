@@ -56,6 +56,26 @@ public class SpaceInvaders
 		renderGrid();
 	}
 	
+	public void StartNewGame()
+	{
+		move_Left = false;
+		grid = new Object[20][25];
+		move_Down = false;
+		is_Over = false;
+		pause = false;
+		
+		AlienList = new LinkedList<Alien>();
+		BarrierList = new LinkedList<Barrier>();
+		LaserList = new LinkedList<Laser>();
+		
+		setBarriers();
+		setAliens();
+		
+		character = new Character(7, 0);
+		
+		renderGrid();
+	}
+	
 	public boolean getPause() {
 		return pause;
 	}
@@ -99,7 +119,10 @@ public class SpaceInvaders
 		{
 			for(int j = 15; j < 25; j ++)
 			{
-				AlienList.add(new Alien(i, j, 1));
+				if(j % 2 == i % 2)
+				{
+					AlienList.add(new Alien(i, j, 1));
+				}
 			}
 		}
 	}
@@ -227,6 +250,7 @@ public class SpaceInvaders
 		{
 			if(alienIterator.next().getLife() == 0)
 			{
+				score += 50;
 				alienIterator.remove();
 			}
 		}
@@ -422,7 +446,7 @@ public class SpaceInvaders
 				Laser laser2 = l2.next();
 				if(laser.getLocation().equals(laser2.getLocation()) && laser.getFriendly() != laser2.getFriendly())
 				{
-					System.out.println("Remove 1");
+					//System.out.println("Remove 1");
 					laser.removeLaser();
 					laser2.removeLaser();
 				}
@@ -431,7 +455,7 @@ public class SpaceInvaders
 				{
 					if(!laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() - 1 && laser.getLocation().getX() == laser2.getLocation().getX())
 					{
-						System.out.println("Remove 2");
+						//System.out.println("Remove 2");
 						laser.removeLaser();
 						laser2.removeLaser();
 					}
@@ -440,7 +464,7 @@ public class SpaceInvaders
 				{
 					if(laser2.getFriendly() && laser.getLocation().getY() == laser2.getLocation().getY() + 1 && laser.getLocation().getX() == laser2.getLocation().getX())
 					{
-						System.out.println("Remove 3");
+						//System.out.println("Remove 3");
 						laser.removeLaser();
 						laser2.removeLaser();
 					}
@@ -469,5 +493,15 @@ public class SpaceInvaders
 	public boolean isOver()
 	{
 		return is_Over;
+	}
+	
+	public int getScore()
+	{
+		return score;
+	}
+	
+	public boolean shouldRestart()
+	{
+		return AlienList.isEmpty();
 	}
 }

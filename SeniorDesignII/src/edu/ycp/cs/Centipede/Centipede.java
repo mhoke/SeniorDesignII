@@ -273,6 +273,6 @@ public class Centipede
 	
 	public int getScore()
 	{
-		return 50 * Centipede.size();
+		return 50 * Centipede.size() - 100;
 	}
 }
