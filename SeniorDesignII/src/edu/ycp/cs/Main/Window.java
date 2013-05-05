@@ -68,7 +68,7 @@ public class Window {
 	private boolean tetrisFlag = true;
 	private boolean centFlag = true;
 	private boolean siFlag = true;
-	private boolean ArcadeControls = false;
+	private boolean ArcadeControls;
 	
 	// Create the "cards"
 	JPanel card1 = new JPanel();
@@ -84,10 +84,21 @@ public class Window {
 		siGame.pause();
 
 		// Button for SplashScreen
-		JButton continueButton = new JButton("CONTINUE TO MAIN MENU");
-		continueButton.addActionListener(new ActionListener() {
+		JButton arcadeButton = new JButton("Arcade Controls");
+		arcadeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ArcadeControls = true;
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, MAINMENU);
+			}
+		});
+		
+		JButton pcButton = new JButton("PC Controls");
+		pcButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ArcadeControls = false;
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, MAINMENU);
 			}
@@ -96,8 +107,9 @@ public class Window {
 		// SPLASHSCREEN CARD setup
 		SplashScreen splash = new SplashScreen();
 		splash.setLayout(new FlowLayout());
+		splash.add(arcadeButton);
+		splash.add(pcButton);
 		card1.add(splash);
-		splash.add(continueButton);
 
 		// Buttons for MainMenu
 		JButton menuButton1 = new JButton("PLAY TETRIS");
@@ -146,6 +158,16 @@ public class Window {
 				card5.requestFocusInWindow();
 			}
 		});
+		
+		// Button for Space Invaders
+		JButton menuButton5 = new JButton("CONTROLS");
+		menuButton5.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, SPLASHSCREEN);
+			}
+		});
 
 		// MAINMENU CARD setup
 		MainMenuScreen mms = new MainMenuScreen();
@@ -162,6 +184,8 @@ public class Window {
 		mms.add(menuButton4, gbc);
 		gbc.gridy++;
 		mms.add(menuButton2, gbc);
+		gbc.gridy++;
+		mms.add(menuButton5, gbc);
 		
 		// HIGHSCORE CARD setup ---------------------------------------------------------------
 		HighScoreMenuScreen bckgrnd = new HighScoreMenuScreen();
@@ -366,7 +390,7 @@ public class Window {
 		final JButton tetrisRestartButton = new JButton("Restart");
 		tetrisButtonContainer.add(tetrisRestartButton, gbc4);
 		gbc4.gridy++;
-		JButton mainMenuButton = new JButton("Main Menu");
+		final JButton mainMenuButton = new JButton("Main Menu");
 		tetrisButtonContainer.add(mainMenuButton, gbc4);
 		gbc4.gridy++;
 
@@ -463,6 +487,9 @@ public class Window {
 					} else if (e.getKeyChar() == 'r'
 						|| e.getKeyChar() == 'R') {
 						tetrisRestartButton.doClick();
+					} else if (e.getKeyChar() == 'm'
+						|| e.getKeyChar() == 'M') {
+						mainMenuButton.doClick();
 					}
 				}
 				else
@@ -603,7 +630,7 @@ public class Window {
 		final JButton centRestartButton = new JButton("Restart");
 		centButtonContainer.add(centRestartButton, gbc6);
 		gbc6.gridy++;
-		JButton centMainMenuButton = new JButton("Main Menu");
+		final JButton centMainMenuButton = new JButton("Main Menu");
 		centButtonContainer.add(centMainMenuButton, gbc6);
 		gbc6.gridy++;
 		card4.add(centButtonContainer, gbc5);
@@ -688,6 +715,9 @@ public class Window {
 					} else if (e.getKeyChar() == 'r'
 						|| e.getKeyChar() == 'R') {
 						centRestartButton.doClick();
+					} else if (e.getKeyChar() == 'm'
+						|| e.getKeyChar() == 'M') {
+						centMainMenuButton.doClick();
 					}
 				}
 				else
@@ -826,7 +856,7 @@ public class Window {
 		final JButton siRestartButton = new JButton("Restart");
 		siButtonContainer.add(siRestartButton, gbc8);
 		gbc8.gridy++;
-		JButton siMainMenuButton = new JButton("Main Menu");
+		final JButton siMainMenuButton = new JButton("Main Menu");
 		siButtonContainer.add(siMainMenuButton, gbc8);
 		gbc8.gridy++;
 		card5.add(siButtonContainer, gbc7);
@@ -901,6 +931,9 @@ public class Window {
 					} else if (e.getKeyChar() == 'r'
 						|| e.getKeyChar() == 'R') {
 						siRestartButton.doClick();
+					}  else if (e.getKeyChar() == 'm'
+						|| e.getKeyChar() == 'M') {
+						siMainMenuButton.doClick();
 					}
 				}
 				else
