@@ -65,20 +65,20 @@ public class Window {
 	private Centipede centGame = new Centipede();
 	private SpaceInvaders siGame = new SpaceInvaders();
 	
-	private boolean tetrisFlag = false;
-	private boolean centFlag = false;
-	private boolean siFlag = false;
+	private boolean tetrisFlag = true;
+	private boolean centFlag = true;
+	private boolean siFlag = true;
 	private boolean ArcadeControls = false;
+	
+	// Create the "cards"
+	JPanel card1 = new JPanel();
+	JPanel card2 = new JPanel();
+	JPanel card3 = new JPanel();
+	JPanel card4 = new JPanel();
+	JPanel card5 = new JPanel();
+	JPanel card6 = new JPanel();
 
-	public void addComponentToWindow(final Container pane) {
-		// Create the "cards"
-		final JPanel card1 = new JPanel();
-		final JPanel card2 = new JPanel();
-		final JPanel card3 = new JPanel();
-		final JPanel card4 = new JPanel();
-		final JPanel card5 = new JPanel();
-		final JPanel card6 = new JPanel();
-		
+	public void addComponentToWindow(final Container pane) {		
 		tetrisGame.pause();
 		centGame.pause();
 		siGame.pause();
@@ -107,6 +107,7 @@ public class Window {
 				cards.add(card3, TETRIS);
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, TETRIS);
+				card3.requestFocusInWindow();
 			}
 		});
 		
@@ -115,6 +116,7 @@ public class Window {
 		menuButton2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				card6.revalidate();
 				cards.add(card6, HIGHSCORES);
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, HIGHSCORES);				
@@ -128,7 +130,8 @@ public class Window {
 			public void actionPerformed(ActionEvent e) {				
 				cards.add(card4, CENTIPEDE);
 				CardLayout cl = (CardLayout) (cards.getLayout());
-				cl.show(cards, CENTIPEDE);				
+				cl.show(cards, CENTIPEDE);
+				card4.requestFocusInWindow();
 			}
 		});
 		
@@ -139,7 +142,8 @@ public class Window {
 			public void actionPerformed(ActionEvent e) {				
 				cards.add(card5, SPACEINVADERS);
 				CardLayout cl = (CardLayout) (cards.getLayout());
-				cl.show(cards, SPACEINVADERS);				
+				cl.show(cards, SPACEINVADERS);
+				card5.requestFocusInWindow();
 			}
 		});
 
@@ -356,10 +360,10 @@ public class Window {
 		gbc4.gridx = 0;
 		gbc4.gridy = 0;
 		gbc4.insets = new Insets(2, 2, 2, 2);
-		final JButton tetrisPauseButton = new JButton("Pause");
+		final JButton tetrisPauseButton = new JButton("Start");
 		tetrisButtonContainer.add(tetrisPauseButton, gbc4);
 		gbc4.gridy++;
-		JButton tetrisRestartButton = new JButton("Restart");
+		final JButton tetrisRestartButton = new JButton("Restart");
 		tetrisButtonContainer.add(tetrisRestartButton, gbc4);
 		gbc4.gridy++;
 		JButton mainMenuButton = new JButton("Main Menu");
@@ -456,6 +460,9 @@ public class Window {
 						}
 						tetrisGame.pause();
 						card3.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+					} else if (e.getKeyChar() == 'r'
+						|| e.getKeyChar() == 'R') {
+						tetrisRestartButton.doClick();
 					}
 				}
 				else
@@ -470,13 +477,14 @@ public class Window {
 						tetrisGame.pause();
 						card3.requestFocusInWindow();
 					}
-				}
+				}				
 			}
 		};
 		card3.addKeyListener(tkl);
 
 		card3.requestFocusInWindow();
 		draw_tetris_grid();
+		draw_next_piece_grid();
 		card3.revalidate(); // Redraws graphics on card3
 
 		// Actual loop for game
@@ -589,10 +597,10 @@ public class Window {
 		gbc6.gridx = 0;
 		gbc6.gridy = 0;
 		gbc6.insets = new Insets(2, 2, 2, 2);
-		final JButton centPauseButton = new JButton("Pause");
+		final JButton centPauseButton = new JButton("Start");
 		centButtonContainer.add(centPauseButton, gbc6);
 		gbc6.gridy++;
-		JButton centRestartButton = new JButton("Restart");
+		final JButton centRestartButton = new JButton("Restart");
 		centButtonContainer.add(centRestartButton, gbc6);
 		gbc6.gridy++;
 		JButton centMainMenuButton = new JButton("Main Menu");
@@ -677,6 +685,9 @@ public class Window {
 						}
 						centGame.pause();
 						card4.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+					} else if (e.getKeyChar() == 'r'
+						|| e.getKeyChar() == 'R') {
+						centRestartButton.doClick();
 					}
 				}
 				else
@@ -697,6 +708,7 @@ public class Window {
 		card4.addKeyListener(ckl);
 
 		card4.requestFocusInWindow();
+		centGame.Move(centGame.getCurrentDir());
 		draw_centipede_grid();
 		card4.revalidate(); // Redraws graphics on card4
 		
@@ -808,10 +820,10 @@ public class Window {
 		gbc8.gridx = 0;
 		gbc8.gridy = 0;
 		gbc8.insets = new Insets(2, 2, 2, 2);
-		final JButton siPauseButton = new JButton("Pause");
+		final JButton siPauseButton = new JButton("Start");
 		siButtonContainer.add(siPauseButton, gbc8);
 		gbc8.gridy++;
-		JButton siRestartButton = new JButton("Restart");
+		final JButton siRestartButton = new JButton("Restart");
 		siButtonContainer.add(siRestartButton, gbc8);
 		gbc8.gridy++;
 		JButton siMainMenuButton = new JButton("Main Menu");
@@ -886,6 +898,9 @@ public class Window {
 						}
 						siGame.pause();
 						card5.requestFocusInWindow(); // Needed to reset focus for keyboard interaction
+					} else if (e.getKeyChar() == 'r'
+						|| e.getKeyChar() == 'R') {
+						siRestartButton.doClick();
 					}
 				}
 				else

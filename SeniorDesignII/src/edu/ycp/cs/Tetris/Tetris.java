@@ -790,6 +790,11 @@ public class Tetris
 		return next_style;
 	}
 
+	public void endGame()
+	{
+		over = true;
+	}
+
 	public boolean isOver() 
 	{
 		return over;
