@@ -968,44 +968,28 @@ public class Window {
 				}
 				if (siGame.isOver()) {
 					((Timer) arg0.getSource()).stop();
-					if(!siGame.shouldRestart())
-					{
-						Container gameOverContainer = new Container();
-						gameOverContainer.setLayout(new GridBagLayout());
-						GridBagConstraints gbc11 = new GridBagConstraints();
-						gbc11.gridx = 0;
-						gbc11.gridy = 0;
-						gbc11.insets = new Insets(2, 2, 2, 2);
-						JLabel gameOver = new JLabel("GAME OVER!");
-						JLabel tetrisScore = new JLabel("Final score is: " + siGame.getScore());
-						JLabel pressRestart = new JLabel("Press restart!");
-						gameOverContainer.add(gameOver, gbc11);
-						gbc11.gridy++;
-						gameOverContainer.add(tetrisScore, gbc11);
-						gbc11.gridy++;
-						gameOverContainer.add(pressRestart, gbc11);
-						siButtonContainer.add(gameOverContainer, gbc8);
-						card5.requestFocusInWindow();
-						
-						Score score = new Score();
-						score.getScores("Space Invaders");
-						score.createRandomName();
-						score.setCurrent_Score(siGame.getScore());
-						score.checkScore();
-					}
-					else
-					{
-						//TODO: Doesn't actually move from here - why??
-						siGame.StartNewGame();
-						draw_si_grid();						
-						card5.revalidate(); // Redraws graphics on card5
-//						siTimer.setRepeats(true);
-//						siTimer.setCoalesce(true);
-//						siTimer.start();
-						siGame.pause();
-						siFlag = true;
-						siPauseButton.setText("Start");
-					}
+					Container gameOverContainer = new Container();
+					gameOverContainer.setLayout(new GridBagLayout());
+					GridBagConstraints gbc11 = new GridBagConstraints();
+					gbc11.gridx = 0;
+					gbc11.gridy = 0;
+					gbc11.insets = new Insets(2, 2, 2, 2);
+					JLabel gameOver = new JLabel("GAME OVER!");
+					JLabel tetrisScore = new JLabel("Final score is: " + siGame.getScore());
+					JLabel pressRestart = new JLabel("Press restart!");
+					gameOverContainer.add(gameOver, gbc11);
+					gbc11.gridy++;
+					gameOverContainer.add(tetrisScore, gbc11);
+					gbc11.gridy++;
+					gameOverContainer.add(pressRestart, gbc11);
+					siButtonContainer.add(gameOverContainer, gbc8);
+					card5.requestFocusInWindow();
+					
+					Score score = new Score();
+					score.getScores("Space Invaders");
+					score.createRandomName();
+					score.setCurrent_Score(siGame.getScore());
+					score.checkScore();
 				}
 			}
 		});
@@ -1315,7 +1299,7 @@ public class Window {
 		private Color getColor(Object value) {
 			// get grid object (alien, barrier, or character) and use certain color for each
 			if (value.getClass().equals(Barrier.class)) {
-				return Color.ORANGE;
+				return Color.MAGENTA;
 			}
 			else if (value.getClass().equals(Alien.class)) {
 				return Color.CYAN;
